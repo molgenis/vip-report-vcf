@@ -1,10 +1,9 @@
 {
-  "name": "vip-report-vcf",
+  "name": "@molgenis/vip-report-vcf",
   "version": "1.0.0",
   "description": "TypeScript VCF library with support for both reading and writing",
-  "main": "./src/index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
     "test": "jest --config jest.config.js",
