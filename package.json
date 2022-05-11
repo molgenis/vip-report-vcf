@@ -1,0 +1,24 @@
+{
+  "name": "vip-report-vcf",
+  "version": "1.0.0",
+  "description": "TypeScript VCF library with support for both reading and writing",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molgenis/vip-report-vcf.git"
+  },
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/molgenis/vip-report-vcf/issues"
+  },
+  "homepage": "https://github.com/molgenis/vip-report-vcf#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
