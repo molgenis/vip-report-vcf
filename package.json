@@ -4,6 +4,9 @@
   "description": "TypeScript VCF library with support for both reading and writing",
   "main": "./src/index.ts",
   "scripts": {
+    "build": "tsc",
+    "format": "prettier --write src/**/*.ts",
+    "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
