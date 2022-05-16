@@ -108,13 +108,18 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
   if (separator) {
     numberMetadata.separator = separator;
   }
-  return {
+  const metadata: InfoMetadata = {
     id: token,
     number: numberMetadata,
     type,
     description: token,
-    categories: categories,
     parent: infoMetadata,
-    required,
   };
+  if (categories) {
+    metadata.categories = categories;
+  }
+  if (required) {
+    metadata.required = required;
+  }
+  return metadata;
 }
