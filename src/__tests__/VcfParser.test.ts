@@ -1,6 +1,6 @@
 import { parseVcf } from "../VcfParser";
 import { Container } from "../Vcf";
-import { Value } from "../ValueParser";
+import { ValueArray } from "../ValueParser";
 
 // trailing info semicolon placed on purpose
 const vcf = `
@@ -197,7 +197,7 @@ test("parse vcf - escaped nested info values", () => {
             ["x0", "y0", "z0"],
             ["x1", "y1a,y1b", "z1"],
             ["x2", "y2", "z2"],
-          ] as unknown as Value,
+          ] as ValueArray,
         },
         s: [],
       },
