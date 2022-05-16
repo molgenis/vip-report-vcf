@@ -5,6 +5,7 @@ import {
   parseStringArrayNonNullValues,
   parseStringValueNonNull,
   Value,
+  ValueArray,
 } from "./ValueParser";
 import { MISSING } from "./Constants";
 import { FieldMetadata, parseFormatMetadata, parseInfoMetadata } from "./MetadataParser";
@@ -22,7 +23,7 @@ export interface FieldMetadataContainer {
 }
 
 export interface InfoContainer {
-  [index: string]: Value | Value[];
+  [index: string]: Value | ValueArray;
 }
 
 export function parseVcf(vcf: string): Container {

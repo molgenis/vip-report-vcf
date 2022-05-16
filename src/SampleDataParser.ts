@@ -1,12 +1,12 @@
 import { FieldMetadata } from "./MetadataParser";
 import { parseValue } from "./DataParser";
-import { parseIntegerValue, Value } from "./ValueParser";
+import { parseIntegerValue, Value, ValueArray } from "./ValueParser";
 
 export interface RecordSample {
   [index: string]: RecordSampleType;
 }
 
-export type RecordSampleType = Genotype | Value | Value[];
+export type RecordSampleType = Genotype | Value | ValueArray;
 export type GenotypeAllele = number | null;
 export type GenotypeType = "het" | "hom_a" | "hom_r" | "miss" | "part";
 
@@ -36,7 +36,7 @@ export function parseRecordSample(
 }
 
 export function parseFormatValue(token: string, formatMetadata: FieldMetadata): RecordSampleType {
-  let value: Genotype | Value | Value[];
+  let value: Genotype | Value | ValueArray;
   if (formatMetadata.id === "GT") {
     value = parseGenotype(token);
   } else {

@@ -1,8 +1,8 @@
 import { InfoMetadata, NestedFieldMetadata } from "./MetadataParser";
-import { parseTypedValue, Value } from "./ValueParser";
+import { parseTypedValue, Value, ValueArray } from "./ValueParser";
 
-export function parseValue(token: string, infoMetadata: InfoMetadata): Value | Value[] {
-  let value: Value | Value[];
+export function parseValue(token: string, infoMetadata: InfoMetadata): Value | ValueArray {
+  let value: Value | ValueArray;
   const type = infoMetadata.number.type;
   switch (type) {
     case "NUMBER":
@@ -25,7 +25,7 @@ export function parseValue(token: string, infoMetadata: InfoMetadata): Value | V
   return value;
 }
 
-export function parseSingleValue(token: string, infoMetadata: InfoMetadata): Value | Value[] {
+export function parseSingleValue(token: string, infoMetadata: InfoMetadata): Value | ValueArray {
   let value: Value | Value[];
   if (infoMetadata.nested) {
     value = parseNestedValue(token, infoMetadata.nested);
@@ -35,21 +35,21 @@ export function parseSingleValue(token: string, infoMetadata: InfoMetadata): Val
   return value;
 }
 
-export function parseMultiValue(token: string, infoMetadata: InfoMetadata): Value[] {
+export function parseMultiValue(token: string, infoMetadata: InfoMetadata): ValueArray {
   const values: Value[] = [];
   if (token.length > 0) {
     for (const part of token.split(infoMetadata.number.separator as string)) {
-      values.push(parseSingleValue(part, infoMetadata) as Value);
+      values.push(parseSingleValue(part, infoMetadata));
     }
   }
   return values;
 }
 
-export function parseNestedValue(token: string, nestedInfoMetadata: NestedFieldMetadata): Value[] {
+export function parseNestedValue(token: string, nestedInfoMetadata: NestedFieldMetadata): ValueArray {
   const infoValues: Value[] = [];
   const parts = token.split(nestedInfoMetadata.separator);
   for (let i = 0; i < parts.length; ++i) {
-    infoValues.push(parseValue(parts[i], nestedInfoMetadata.items[i]) as Value);
+    infoValues.push(parseValue(parts[i], nestedInfoMetadata.items[i]));
   }
   return infoValues;
 }

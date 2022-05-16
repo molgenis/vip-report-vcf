@@ -1,7 +1,8 @@
 import { MISSING } from "./Constants";
 import { ValueType } from "./MetadataParser";
 
-export type Value = ValueCharacter | ValueFlag | ValueFloat | ValueInteger | ValueObject | ValueString;
+export type Value = ValueCharacter | ValueFlag | ValueFloat | ValueInteger | ValueObject | ValueString | ValueArray;
+export type ValueArray = Array<Value | Array<Value>>;
 export type ValueCharacter = string | null;
 export type ValueFlag = boolean | null;
 export type ValueFloat = number | null;
