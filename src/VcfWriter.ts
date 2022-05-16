@@ -2,7 +2,7 @@ import { Container, FormatMetadataContainer, Genotype, Metadata, Record, RecordS
 import { MISSING } from "./Constants";
 import { FieldMetadataContainer, InfoContainer } from "./VcfParser";
 import { FieldMetadata, NestedFieldMetadata } from "./MetadataParser";
-import { Value } from "./ValueParser";
+import { Value, ValueArray } from "./ValueParser";
 import { RecordSampleType } from "./SampleDataParser";
 
 export type Filter = {
@@ -122,14 +122,14 @@ function writeInfo(infoFields: FieldMetadataContainer, infoValues: InfoContainer
   return vcf.join(";");
 }
 
-function writeInfoField(infoField: FieldMetadata, infoValue: Value | Value[]): string {
+function writeInfoField(infoField: FieldMetadata, infoValue: Value | ValueArray): string {
   let vcf;
   if (infoField.number.count === 0) {
     vcf = infoField.id;
   } else if (infoField.number.count === 1) {
-    vcf = infoField.id + "=" + writeFieldValueSingle(infoField, infoValue as Value);
+    vcf = infoField.id + "=" + writeFieldValueSingle(infoField, infoValue);
   } else {
-    vcf = infoField.id + "=" + writeFieldValueMultiple(infoField, infoValue as Value[], ",");
+    vcf = infoField.id + "=" + writeFieldValueMultiple(infoField, infoValue as ValueArray, ",");
   }
   return vcf;
 }
@@ -137,19 +137,19 @@ function writeInfoField(infoField: FieldMetadata, infoValue: Value | Value[]): s
 function writeFieldValueSingle(field: FieldMetadata, value: Value, missingValue = MISSING): string {
   let vcf;
   if (field.nested) {
-    vcf = writeFieldValueNested(field.nested, value as unknown as Value[]);
+    vcf = writeFieldValueNested(field.nested, value as ValueArray);
   } else {
     vcf = writeFieldValue(field, value, missingValue);
   }
   return vcf;
 }
 
-function writeFieldValueMultiple(field: FieldMetadata, values: Value[], separator: string): string {
+function writeFieldValueMultiple(field: FieldMetadata, values: ValueArray, separator: string): string {
   const vcf = [];
 
   for (const infoValue of values) {
     if (field.nested) {
-      vcf.push(writeFieldValueNested(field.nested, infoValue as unknown as Value[]));
+      vcf.push(writeFieldValueNested(field.nested, infoValue as ValueArray));
     } else {
       vcf.push(writeFieldValue(field, infoValue, ""));
     }
@@ -158,13 +158,13 @@ function writeFieldValueMultiple(field: FieldMetadata, values: Value[], separato
   return vcf.join(separator);
 }
 
-function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: Value[]): string {
+function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: ValueArray): string {
   const vcf = [];
   for (const [index, infoField] of nestedField.items.entries()) {
     if (infoField.number.count === 1) {
       vcf.push(writeFieldValueSingle(infoField, nestedValues[index], ""));
     } else {
-      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index] as unknown as Value[], "&"));
+      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index] as ValueArray, "&"));
     }
   }
   return vcf.join(nestedField.separator);
@@ -224,7 +224,7 @@ function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): 
     } else if (formatField.number.count === 1) {
       vcf = writeFieldValueSingle(formatField, value as Value);
     } else {
-      vcf = writeFieldValueMultiple(formatField, value as Value[], ",");
+      vcf = writeFieldValueMultiple(formatField, value as ValueArray, ",");
     }
   }
   return vcf;
