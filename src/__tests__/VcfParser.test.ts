@@ -1,6 +1,7 @@
 import { parseVcf } from "../VcfParser";
 import { Container } from "../Vcf";
 import { ValueArray } from "../ValueParser";
+import { expect, test } from "vitest";
 
 // trailing info semicolon placed on purpose
 const vcf = `

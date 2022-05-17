@@ -10,6 +10,7 @@ import {
   parseStringValueNonNull,
   parseTypedValue,
 } from "../ValueParser";
+import { expect, test } from "vitest";
 
 test("parse typed value - CHARACTER", () => {
   expect(parseTypedValue("a", "CHARACTER")).toBe("a");
