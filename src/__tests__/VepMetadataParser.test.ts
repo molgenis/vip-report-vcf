@@ -1,5 +1,6 @@
 import { createVepInfoMetadata, isVepInfoMetadata } from "../VepMetadataParser";
 import { InfoMetadata } from "../MetadataParser";
+import { expect, test } from "vitest";
 
 const vepInfoMetadata: InfoMetadata = {
   id: "CSQ",

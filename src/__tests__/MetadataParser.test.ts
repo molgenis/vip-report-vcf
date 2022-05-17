@@ -5,6 +5,7 @@ import {
   parseNumberMetadata,
   parseValueType,
 } from "../MetadataParser";
+import { expect, test } from "vitest";
 
 test("parse number metadata - A", () => {
   expect(parseNumberMetadata("A")).toStrictEqual({ type: "PER_ALT", separator: "," });

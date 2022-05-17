@@ -1,5 +1,6 @@
 import { parseMultiValue, parseSingleValue, parseValue } from "../DataParser";
 import { InfoMetadata, NumberMetadata } from "../MetadataParser";
+import { expect, test } from "vitest";
 
 const csqInfoMetadata: InfoMetadata = {
   id: "CSQ",

@@ -1,5 +1,6 @@
 import { writeVcf } from "../VcfWriter";
 import { parseVcf } from "../VcfParser";
+import { expect, test } from "vitest";
 
 test("parse and write vcf: ID,REF,ALT,QUAL,FILTER", () => {
   expect(writeVcf(parseVcf(vcfIdRefAltQualFilter))).toBe(vcfIdRefAltQualFilter);
