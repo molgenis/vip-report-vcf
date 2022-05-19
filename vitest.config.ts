@@ -3,10 +3,10 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     coverage: {
-      lines: 99,
-      functions: 99,
-      branches: 99,
-      statements: 99,
+      lines: 90,
+      functions: 90,
+      branches: 90,
+      statements: 90,
     },
   },
 });
