@@ -139,10 +139,6 @@ export function parseInfoMetadata(token: string): InfoMetadata {
     infoMetadata.version = version;
   }
 
-  if (infoMetadata.id === "VIPC") {
-    infoMetadata.type = "CATEGORICAL";
-  }
-
   const nested = createNestedInfoMetadata(infoMetadata);
   if (nested != null) {
     infoMetadata.nested = nested;
