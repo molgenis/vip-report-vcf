@@ -82,7 +82,8 @@ export interface FieldMetadata {
   id: string;
   number: NumberMetadata;
   type: ValueType;
-  description: string;
+  label?: string;
+  description?: string;
   categories?: string[];
   required?: boolean;
   nested?: NestedFieldMetadata;

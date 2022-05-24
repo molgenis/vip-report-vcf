@@ -111,7 +111,7 @@ test("parse info metadata - with nested", () => {
     description: "Consequence annotations from Ensembl VEP. Format: Allele",
     nested: {
       separator: "|",
-      items: [{ id: "Allele", number: { type: "NUMBER", count: 1 }, type: "STRING", description: "Allele" }],
+      items: [{ id: "Allele", number: { type: "NUMBER", count: 1 }, type: "STRING" }],
     },
   };
   if (expected.nested) {
