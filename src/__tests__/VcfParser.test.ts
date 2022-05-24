@@ -149,8 +149,6 @@ test("parse vcf - escaped nested info values", () => {
                 },
 
                 type: "STRING",
-
-                description: "X",
               },
               {
                 id: "Y",
@@ -160,7 +158,6 @@ test("parse vcf - escaped nested info values", () => {
                 },
 
                 type: "STRING",
-                description: "Y",
               },
               {
                 id: "Z",
@@ -170,7 +167,6 @@ test("parse vcf - escaped nested info values", () => {
                 },
 
                 type: "STRING",
-                description: "Z",
               },
             ],
           },

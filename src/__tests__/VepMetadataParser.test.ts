@@ -42,7 +42,8 @@ test("create vep metadata", () => {
   expect(createVepInfoMetadata(vepInfoMetadata)).toStrictEqual({
     items: [
       {
-        description: "Consequence",
+        label: "Effect",
+        description: "Effect(s) described as Sequence Ontology term(s)",
         id: "Consequence",
         number: {
           separator: "&",
@@ -58,7 +59,6 @@ test("create vep metadata", () => {
         type: "STRING",
       },
       {
-        description: "PHENO",
         id: "PHENO",
         number: {
           separator: "&",
@@ -74,7 +74,6 @@ test("create vep metadata", () => {
         type: "INTEGER",
       },
       {
-        description: "STRAND",
         id: "STRAND",
         number: {
           count: 1,
@@ -90,7 +89,8 @@ test("create vep metadata", () => {
         type: "INTEGER",
       },
       {
-        description: "gnomAD_AF",
+        label: "gnomAD AF",
+        description: "gnomAD allele frequency",
         id: "gnomAD_AF",
         number: {
           count: 1,
@@ -106,7 +106,6 @@ test("create vep metadata", () => {
         type: "FLOAT",
       },
       {
-        description: "X",
         id: "X",
         number: {
           count: 1,
@@ -127,5 +126,5 @@ test("create vep metadata", () => {
 });
 
 test("create vep metadata - invalid", () => {
-  expect(() => createVepInfoMetadata(infoMetadata)).toThrow("invalid vep info metadata 'Not VEP'");
+  expect(() => createVepInfoMetadata(infoMetadata)).toThrow("invalid vep info metadata");
 });
