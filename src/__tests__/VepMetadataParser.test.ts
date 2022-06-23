@@ -6,7 +6,8 @@ const vepInfoMetadata: InfoMetadata = {
   id: "CSQ",
   number: { type: "OTHER", separator: "|" },
   type: "STRING",
-  description: "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X",
+  description:
+    "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
   required: true,
 };
 
@@ -40,88 +41,142 @@ test("is vep info metadata - false", () => {
 
 test("create vep metadata", () => {
   expect(createVepInfoMetadata(vepInfoMetadata)).toStrictEqual({
+    separator: "|",
     items: [
       {
-        label: "Effect",
-        description: "Effect(s) described as Sequence Ontology term(s)",
         id: "Consequence",
-        number: {
-          separator: "&",
-          type: "OTHER",
-        },
+        number: { type: "OTHER", separator: "&" },
+        type: "STRING",
         parent: {
-          description: "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X",
           id: "CSQ",
-          number: { separator: "|", type: "OTHER" },
+          number: { type: "OTHER", separator: "|" },
           type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
           required: true,
         },
-        type: "STRING",
+        label: "Effect",
+        description: "Effect(s) described as Sequence Ontology term(s)",
       },
       {
         id: "PHENO",
-        number: {
-          separator: "&",
-          type: "OTHER",
-        },
+        number: { type: "OTHER", separator: "&" },
+        type: "INTEGER",
         parent: {
-          description: "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X",
           id: "CSQ",
-          number: { separator: "|", type: "OTHER" },
+          number: { type: "OTHER", separator: "|" },
           type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
           required: true,
         },
-        type: "INTEGER",
       },
       {
         id: "STRAND",
-        number: {
-          count: 1,
-          type: "NUMBER",
-        },
+        number: { type: "NUMBER", count: 1 },
+        type: "INTEGER",
         parent: {
-          description: "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X",
           id: "CSQ",
-          number: { separator: "|", type: "OTHER" },
+          number: { type: "OTHER", separator: "|" },
           type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
           required: true,
         },
-        type: "INTEGER",
       },
       {
-        label: "gnomAD AF",
-        description: "gnomAD allele frequency",
         id: "gnomAD_AF",
-        number: {
-          count: 1,
-          type: "NUMBER",
-        },
+        number: { type: "NUMBER", count: 1 },
+        type: "FLOAT",
         parent: {
-          description: "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X",
           id: "CSQ",
-          number: { separator: "|", type: "OTHER" },
+          number: { type: "OTHER", separator: "|" },
           type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
           required: true,
         },
-        type: "FLOAT",
+        label: "gnomAD AF",
+        description: "gnomAD allele frequency",
       },
       {
         id: "X",
-        number: {
-          count: 1,
-          type: "NUMBER",
-        },
+        number: { type: "NUMBER", count: 1 },
+        type: "STRING",
         parent: {
-          description: "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X",
           id: "CSQ",
-          number: { separator: "|", type: "OTHER" },
+          number: { type: "OTHER", separator: "|" },
           type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
           required: true,
         },
-        type: "STRING",
+      },
+      {
+        id: "clinVar",
+        number: { type: "NUMBER", count: 1 },
+        type: "INTEGER",
+        parent: {
+          id: "CSQ",
+          number: { type: "OTHER", separator: "|" },
+          type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+          required: true,
+        },
+        label: "ClinVar ID",
+        description: "ClinVar Variation ID",
+      },
+      {
+        id: "clinVar_CLNSIG",
+        number: { type: "OTHER", separator: "/" },
+        type: "CATEGORICAL",
+        parent: {
+          id: "CSQ",
+          number: { type: "OTHER", separator: "|" },
+          type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+          required: true,
+        },
+        categories: [
+          "Benign",
+          "Likely_benign",
+          "Uncertain_significance",
+          "Likely_pathogenic",
+          "Pathogenic",
+          "Conflicting_interpretations_of_pathogenicity",
+        ],
+        label: "ClinVar",
+        description: "ClinVar classification(s)",
+      },
+      {
+        id: "clinVar_CLNREVSTAT",
+        number: { type: "OTHER", separator: "," },
+        type: "CATEGORICAL",
+        parent: {
+          id: "CSQ",
+          number: { type: "OTHER", separator: "|" },
+          type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+          required: true,
+        },
+        categories: [
+          "practice_guideline",
+          "reviewed_by_expert_panel",
+          "criteria_provided",
+          "_multiple_submitters",
+          "_no_conflicts",
+          "_single_submitter",
+          "_conflicting_interpretations",
+          "no_assertion_criteria_provided",
+          "no_assertion_provided",
+        ],
+        label: "ClinVar status",
+        description: "ClinVar review status",
       },
     ],
-    separator: "|",
   });
 });
 
