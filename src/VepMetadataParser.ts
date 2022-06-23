@@ -62,6 +62,46 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
       separator = "&";
       type = "STRING";
       break;
+    case "clinVar":
+      label = "ClinVar ID";
+      description = "ClinVar Variation ID";
+      numberType = "NUMBER";
+      numberCount = 1;
+      type = "INTEGER";
+      break;
+    case "clinVar_CLNSIG":
+      label = "ClinVar";
+      description = "ClinVar classification(s)";
+      numberType = "OTHER";
+      separator = "/";
+      type = "CATEGORICAL";
+      categories = [
+        "Benign",
+        "Likely_benign",
+        "Uncertain_significance",
+        "Likely_pathogenic",
+        "Pathogenic",
+        "Conflicting_interpretations_of_pathogenicity",
+      ];
+      break;
+    case "clinVar_CLNREVSTAT":
+      label = "ClinVar status";
+      description = "ClinVar review status";
+      numberType = "OTHER";
+      separator = ",";
+      type = "CATEGORICAL";
+      categories = [
+        "practice_guideline",
+        "reviewed_by_expert_panel",
+        "criteria_provided",
+        "_multiple_submitters",
+        "_no_conflicts",
+        "_single_submitter",
+        "_conflicting_interpretations",
+        "no_assertion_criteria_provided",
+        "no_assertion_provided",
+      ];
+      break;
     case "Existing_variation":
     case "FLAGS":
     case "HPO":
