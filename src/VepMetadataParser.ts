@@ -72,7 +72,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
       label = "ClinVar variant";
       description = "Clinical significance for this single variant";
       numberType = "OTHER";
-      separator = "&";
+      separator = "/";
       type = "CATEGORICAL";
       categories = [
         "Benign",

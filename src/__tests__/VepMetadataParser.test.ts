@@ -129,7 +129,7 @@ test("create vep metadata", () => {
       },
       {
         id: "clinVar_CLNSIG",
-        number: { type: "OTHER", separator: "&" },
+        number: { type: "OTHER", separator: "/" },
         type: "CATEGORICAL",
         parent: {
           id: "CSQ",
