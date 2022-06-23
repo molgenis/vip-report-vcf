@@ -70,10 +70,25 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
       type = "INTEGER";
       break;
     case "clinVar_CLNSIG":
-      label = "ClinVar";
-      description = "ClinVar classification(s)";
+      label = "ClinVar variant";
+      description = "Clinical significance for this single variant";
       numberType = "OTHER";
-      separator = "/";
+      separator = "&";
+      type = "CATEGORICAL";
+      categories = [
+        "Benign",
+        "Likely_benign",
+        "Uncertain_significance",
+        "Likely_pathogenic",
+        "Pathogenic",
+        "Conflicting_interpretations_of_pathogenicity",
+      ];
+      break;
+    case "clinVar_CLNSIGINCL":
+      label = "ClinVar variant combination";
+      description = "Clinical significance for a haplotype or genotype that includes this variant";
+      numberType = "OTHER";
+      separator = "&";
       type = "CATEGORICAL";
       categories = [
         "Benign",
@@ -88,7 +103,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
       label = "ClinVar status";
       description = "ClinVar review status";
       numberType = "OTHER";
-      separator = ",";
+      separator = "&";
       type = "CATEGORICAL";
       categories = [
         "practice_guideline",
