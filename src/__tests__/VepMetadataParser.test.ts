@@ -7,7 +7,7 @@ const vepInfoMetadata: InfoMetadata = {
   number: { type: "OTHER", separator: "|" },
   type: "STRING",
   description:
-    "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+    "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
   required: true,
 };
 
@@ -52,7 +52,7 @@ test("create vep metadata", () => {
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
         label: "Effect",
@@ -67,7 +67,7 @@ test("create vep metadata", () => {
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
       },
@@ -80,7 +80,7 @@ test("create vep metadata", () => {
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
       },
@@ -93,7 +93,7 @@ test("create vep metadata", () => {
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
         label: "gnomAD AF",
@@ -108,20 +108,20 @@ test("create vep metadata", () => {
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
       },
       {
         id: "clinVar",
-        number: { type: "NUMBER", count: 1 },
+        number: { type: "OTHER" },
         type: "INTEGER",
         parent: {
           id: "CSQ",
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
         label: "ClinVar ID",
@@ -129,14 +129,14 @@ test("create vep metadata", () => {
       },
       {
         id: "clinVar_CLNSIG",
-        number: { type: "OTHER", separator: "/" },
+        number: { type: "OTHER", separator: "&" },
         type: "CATEGORICAL",
         parent: {
           id: "CSQ",
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
         categories: [
@@ -147,19 +147,42 @@ test("create vep metadata", () => {
           "Pathogenic",
           "Conflicting_interpretations_of_pathogenicity",
         ],
-        label: "ClinVar",
-        description: "ClinVar classification(s)",
+        label: "ClinVar variant",
+        description: "Clinical significance for this single variant",
       },
       {
-        id: "clinVar_CLNREVSTAT",
-        number: { type: "OTHER", separator: "," },
+        id: "clinVar_CLNSIGINCL",
+        number: { type: "OTHER", separator: "&" },
         type: "CATEGORICAL",
         parent: {
           id: "CSQ",
           number: { type: "OTHER", separator: "|" },
           type: "STRING",
           description:
-            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNREVSTAT",
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
+          required: true,
+        },
+        categories: [
+          "Benign",
+          "Likely_benign",
+          "Uncertain_significance",
+          "Likely_pathogenic",
+          "Pathogenic",
+          "Conflicting_interpretations_of_pathogenicity",
+        ],
+        label: "ClinVar variant combination",
+        description: "Clinical significance for a haplotype or genotype that includes this variant",
+      },
+      {
+        id: "clinVar_CLNREVSTAT",
+        number: { type: "OTHER", separator: "&" },
+        type: "CATEGORICAL",
+        parent: {
+          id: "CSQ",
+          number: { type: "OTHER", separator: "|" },
+          type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Consequence|PHENO|STRAND|gnomAD_AF|X|clinVar|clinVar_CLNSIG|clinVar_CLNSIGINCL|clinVar_CLNREVSTAT",
           required: true,
         },
         categories: [
