@@ -114,7 +114,7 @@ test("create vep metadata", () => {
       },
       {
         id: "clinVar",
-        number: { type: "NUMBER", count: 1 },
+        number: { type: "OTHER" },
         type: "INTEGER",
         parent: {
           id: "CSQ",

@@ -65,8 +65,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
     case "clinVar":
       label = "ClinVar ID";
       description = "ClinVar Variation ID";
-      numberType = "NUMBER";
-      numberCount = 1;
+      numberType = "OTHER";
       type = "INTEGER";
       break;
     case "clinVar_CLNSIG":
