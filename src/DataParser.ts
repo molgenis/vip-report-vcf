@@ -38,8 +38,16 @@ export function parseSingleValue(token: string, infoMetadata: InfoMetadata): Val
 export function parseMultiValue(token: string, infoMetadata: InfoMetadata): ValueArray {
   const values: Value[] = [];
   if (token.length > 0) {
-    for (const part of token.split(infoMetadata.number.separator as string)) {
-      values.push(parseSingleValue(part, infoMetadata));
+    // workaround for https://github.com/samtools/hts-specs/issues/631
+    const separator = infoMetadata.number.separator as string;
+    if (infoMetadata.type === "CHARACTER" && token.indexOf(separator) === -1) {
+      for (const character of token) {
+        values.push(parseSingleValue(character, infoMetadata));
+      }
+    } else {
+      for (const part of token.split(separator)) {
+        values.push(parseSingleValue(part, infoMetadata));
+      }
     }
   }
   return values;

@@ -84,6 +84,28 @@ test("parse value - number multiple", () => {
   ).toStrictEqual([1, 2]);
 });
 
+test("parse value - number multiple characters with separator", () => {
+  expect(
+    parseValue("x,y", {
+      id: "CHARACTER_WITH_SEPARATOR",
+      number: { type: "NUMBER", count: 2, separator: "," },
+      type: "CHARACTER",
+      description: "Character",
+    })
+  ).toStrictEqual(["x", "y"]);
+});
+
+test("parse value - number multiple characters without separator", () => {
+  expect(
+    parseValue("xy", {
+      id: "CHARACTER_WITHOUT_SEPARATOR",
+      number: { type: "NUMBER", count: 2, separator: "," },
+      type: "CHARACTER",
+      description: "Character",
+    })
+  ).toStrictEqual(["x", "y"]);
+});
+
 test("parse value - per alt", () => {
   expect(
     parseValue("1,2", {
