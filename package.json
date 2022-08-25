@@ -1,6 +1,6 @@
 {
   "name": "@molgenis/vip-report-vcf",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
     "build": "tsc --build",
@@ -30,15 +30,15 @@
     "access": "public"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
-    "c8": "^7.11.3",
-    "eslint": "^8.17.0",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "@vitest/coverage-c8": "^0.22.1",
+    "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.1",
-    "prettier": "^2.7.0",
-    "typescript": "^4.7.3",
-    "vitest": "^0.14.2"
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4",
+    "vitest": "^0.22.1"
   }
 }
