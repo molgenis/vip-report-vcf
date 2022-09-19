@@ -18,6 +18,8 @@ interface VepFieldMetadata {
   categories: string[] | undefined;
   required: boolean;
   separator: string | undefined;
+  label: string | undefined;
+  description: string | undefined;
 }
 
 export function isVepInfoMetadata(infoMetadata: InfoMetadata): boolean {
@@ -49,7 +51,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
   let type: ValueType;
   let categories: string[] | undefined;
   let required;
-  let label, description;
+  let label, description: string | undefined;
 
   const nestedMetadata = metadataJson as Metadata;
   const fieldMetadata: VepFieldMetadata = nestedMetadata.vepMetadata[token];
@@ -60,6 +62,9 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
     separator = fieldMetadata.separator;
     type = fieldMetadata.type;
     required = fieldMetadata.required !== undefined ? fieldMetadata.required : false;
+    label = fieldMetadata.label;
+    description = fieldMetadata.description;
+    categories = fieldMetadata.categories;
   } else {
     numberType = "NUMBER";
     numberCount = 1;

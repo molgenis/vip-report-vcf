@@ -40,6 +40,7 @@ test("is vep info metadata - false", () => {
 });
 
 test("create vep metadata", () => {
+  console.log(createVepInfoMetadata(vepInfoMetadata).items[0].parent);
   expect(createVepInfoMetadata(vepInfoMetadata)).toStrictEqual({
     separator: "|",
     items: [
