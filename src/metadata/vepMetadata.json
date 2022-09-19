@@ -1,0 +1,241 @@
+{
+  "vepMetadata": {
+    "HGNC_ID": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "cDNA_position": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "CDS_position": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "Protein_position": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "clinVar": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "INTEGER"
+    },
+    "clinVar_CLNSIG": {
+      "numberType": "OTHER",
+      "separator": "/",
+      "type": "STRING"
+    },
+    "clinVar_CLNSIGINCL": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "clinVar_CLNREVSTAT": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "PICK": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "ALLELE_NUM": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "Consequence": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "Existing_variation": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "CLIN_SIG": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "FLAGS": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "HPO": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "InheritanceModesGene": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "VIPP": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "STRING"
+    },
+    "CAPICE_CL": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "CATEGORICAL",
+      "categories": [
+        "B",
+        "LB",
+        "VUS",
+        "LP",
+        "P"
+      ]
+    },
+    "VKGL_CL": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "CATEGORICAL",
+      "categories": [
+        "B",
+        "LB",
+        "VUS",
+        "LP",
+        "P"
+      ]
+    },
+    "Feature_type": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "CATEGORICAL",
+      "categories": [
+        "Transcript",
+        "RegulatoryFeature",
+        "MotifFeature"
+      ],
+      "required": true
+    },
+    "IMPACT": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "CATEGORICAL",
+      "categories": [
+        "LOW",
+        "MODERATE",
+        "HIGH",
+        "MODIFIER"
+      ],
+      "required": true
+    },
+    "SOMATIC": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "INTEGER"
+    },
+    "PUBMED": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "INTEGER"
+    },
+    "PHENO": {
+      "numberType": "OTHER",
+      "separator": "&",
+      "type": "INTEGER"
+    },
+    "gnomAD_HN": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "STRAND": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "INTEGER"
+    },
+    "CAPICE_SC": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_AFR_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_AMR_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_ASJ_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_EAS_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_FIN_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_NFE_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_OTH_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "gnomAD_SAS_AF": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "SpliceAI_pred_DS_AG": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "SpliceAI_pred_DS_AL": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "SpliceAI_pred_DS_DG": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "SpliceAI_pred_DS_DL": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "PolyPhen": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    },
+    "SIFT": {
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "FLOAT"
+    }
+  }
+}
