@@ -3,15 +3,22 @@ import metadataJson from "./metadata/vepMetadata.json";
 
 const REG_EXP_VEP = /Consequence annotations from Ensembl VEP. Format: (.+)/;
 
-interface Metadata {
-  vepMetadata: VepMetadata;
+export interface Metadata {
+  nestedMetadata: NestedMetadatas;
+}
+export interface NestedMetadatas {
+  [index: string]: NestedMetadata;
 }
 
-interface VepMetadata {
-  [index: string]: VepFieldMetadata;
+export interface NestedMetadata {
+  nestedFields: NestedFields;
 }
 
-interface VepFieldMetadata {
+export interface NestedFields {
+  [index: string]: NestedField;
+}
+
+interface NestedField {
   numberType: NumberType;
   numberCount: number;
   type: ValueType;
@@ -53,8 +60,10 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
   let required;
   let label, description: string | undefined;
 
-  const nestedMetadata = metadataJson as Metadata;
-  const fieldMetadata: VepFieldMetadata = nestedMetadata.vepMetadata[token];
+  const meta = metadataJson as Metadata;
+  const nestedMetadata: NestedMetadata = meta.nestedMetadata["CSQ"];
+  const nestedFields = nestedMetadata.nestedFields;
+  const fieldMetadata: NestedField = nestedFields[token];
 
   if (fieldMetadata !== undefined) {
     numberType = fieldMetadata.numberType;

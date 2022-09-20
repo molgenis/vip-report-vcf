@@ -61,6 +61,8 @@ test("create vep metadata", () => {
       },
       {
         id: "PHENO",
+        description: "Phenotype match.",
+        label: "Pheno",
         number: { type: "OTHER", separator: "&" },
         type: "INTEGER",
         parent: {
@@ -74,6 +76,8 @@ test("create vep metadata", () => {
       },
       {
         id: "STRAND",
+        description: "The strand of the gene.",
+        label: "Strand",
         number: { type: "NUMBER", count: 1 },
         type: "INTEGER",
         parent: {
