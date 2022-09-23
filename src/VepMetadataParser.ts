@@ -1,10 +1,10 @@
 import { InfoMetadata, NestedFieldMetadata, NumberMetadata, NumberType, ValueType } from "./MetadataParser";
-import metadataJson from "./metadata/vepMetadata.json";
+import metadataJson from "./metadata/field_metadata.json";
 
 const REG_EXP_VEP = /Consequence annotations from Ensembl VEP. Format: (.+)/;
 
 export interface Metadata {
-  nestedMetadata: NestedMetadatas;
+  info: NestedMetadatas;
 }
 export interface NestedMetadatas {
   [index: string]: NestedMetadata;
@@ -61,7 +61,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
   let label, description: string | undefined;
 
   const meta = metadataJson as Metadata;
-  const nestedMetadata: NestedMetadata = meta.nestedMetadata["CSQ"];
+  const nestedMetadata: NestedMetadata = meta.info["CSQ"];
   const nestedFields = nestedMetadata.nestedFields;
   const fieldMetadata: NestedField = nestedFields[token];
 
