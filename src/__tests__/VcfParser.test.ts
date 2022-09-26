@@ -9,8 +9,8 @@ const vcf = `
 ##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">
 ##INFO=<ID=H2,Number=0,Type=Flag,Description="HapMap2 membership">
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
-#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS0
-1\t12\t.\tC\tT\t.\tPASS\tDP=2;H2;\tGT\t0/1
+#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS0\tS1\tS2
+1\t12\t.\tC\tT\t.\tPASS\tDP=2;H2;\tGT\t0/1\t0/0\t1/1
 `;
 
 test("parse vcf", () => {
@@ -55,9 +55,9 @@ test("parse vcf", () => {
         '##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">',
         '##INFO=<ID=H2,Number=0,Type=Flag,Description="HapMap2 membership">',
         '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
-        "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	S0",
+        "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	S0	S1	S2",
       ],
-      samples: ["S0"],
+      samples: ["S0", "S1", "S2"],
     },
     data: [
       {
@@ -78,6 +78,20 @@ test("parse vcf", () => {
               a: [0, 1],
               p: false,
               t: "het",
+            },
+          },
+          {
+            GT: {
+              a: [0, 0],
+              p: false,
+              t: "hom_r",
+            },
+          },
+          {
+            GT: {
+              a: [1, 1],
+              p: false,
+              t: "hom_a",
             },
           },
         ],

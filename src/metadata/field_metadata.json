@@ -1,0 +1,357 @@
+{
+  "info": {
+    "CSQ": {
+      "nestedFields": {
+        "ALLELE_NUM": {
+          "label": "Allele Nr.",
+          "description": "Allele nr within the VCF file.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "CAPICE_CL": {
+          "label": "CAPICE",
+          "description": "CAPICE classification",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "CATEGORICAL",
+          "categories": [
+            "B",
+            "LB",
+            "VUS",
+            "LP",
+            "P"
+          ]
+        },
+        "CAPICE_SC": {
+          "label": "CAPICE",
+          "description": "CAPICE pathogenicity score",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "cDNA_position": {
+          "label": "cDNA pos",
+          "description": "Position within the cDNA.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "CDS_position": {
+          "label": "CDS pos",
+          "description": "Position within the coding sequence.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "CLIN_SIG": {
+          "label": "ClinVar",
+          "description": "ClinVar classification(s)",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING"
+        },
+        "clinVar": {
+          "label": "ClinVar ID",
+          "description": "ClinVar Variation ID",
+          "numberType": "OTHER",
+          "type": "INTEGER"
+        },
+        "clinVar_CLNSIG": {
+          "label": "ClinVar variant",
+          "description": "Clinical significance for this single variant",
+          "numberType": "OTHER",
+          "separator": "/",
+          "type": "CATEGORICAL",
+          "categories": [
+            "Benign",
+            "Likely_benign",
+            "Uncertain_significance",
+            "Likely_pathogenic",
+            "Pathogenic",
+            "Conflicting_interpretations_of_pathogenicity"
+          ]
+        },
+        "clinVar_CLNSIGINCL": {
+          "label": "ClinVar variant combination",
+          "description": "Clinical significance for a haplotype or genotype that includes this variant",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "CATEGORICAL",
+          "categories": [
+            "Benign",
+            "Likely_benign",
+            "Uncertain_significance",
+            "Likely_pathogenic",
+            "Pathogenic",
+            "Conflicting_interpretations_of_pathogenicity"
+          ]
+        },
+        "clinVar_CLNREVSTAT": {
+          "label": "ClinVar status",
+          "description": "ClinVar review status",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "CATEGORICAL",
+          "categories": [
+            "practice_guideline",
+            "reviewed_by_expert_panel",
+            "criteria_provided",
+            "_multiple_submitters",
+            "_no_conflicts",
+            "_single_submitter",
+            "_conflicting_interpretations",
+            "no_assertion_criteria_provided",
+            "no_assertion_provided"
+          ]
+        },
+        "Consequence": {
+          "label": "Effect",
+          "description": "Effect(s) described as Sequence Ontology term(s)",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING"
+        },
+        "Existing_variation": {
+          "label": "Ex. var.",
+          "description": "Existing variation.",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING"
+        },
+        "Feature_type": {
+          "label": "Feature Type.",
+          "description": "The VEP feature type",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "CATEGORICAL",
+          "categories": [
+            "Transcript",
+            "RegulatoryFeature",
+            "MotifFeature"
+          ],
+          "required": true
+        },
+        "FLAGS": {
+          "label": "Flags",
+          "description": "Flags",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING"
+        },
+        "gnomAD_AF": {
+          "label": "gnomAD AF",
+          "description": "gnomAD allele frequency",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "gnomAD_HN": {
+          "label": "gnomAD HN",
+          "description": "gnomAD number of homozygotes",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "HGNC_ID": {
+          "label": "HGNC ID",
+          "description": "The HGNC gene ID",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "HGVSc": {
+          "label": "HGVS C",
+          "description": "HGVS nomenclature: coding DNA reference sequence",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "STRING"
+        },
+        "HGVSp": {
+          "label": "HGVS P",
+          "description": "HGVS nomenclature: protein reference sequence",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "STRING"
+        },
+        "HPO": {
+          "label": "HPO",
+          "description": "Human phenotype ontology matches.",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING"
+        },
+        "IMPACT": {
+          "label": "Impact",
+          "description": "The Impact as predicted by VEP",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "CATEGORICAL",
+          "categories": [
+            "LOW",
+            "MODERATE",
+            "HIGH",
+            "MODIFIER"
+          ],
+          "required": true
+        },
+        "IncompletePenetrance": {
+          "label": "Inc.Pen.",
+          "description": "Incomplete Penetrance (1:true)",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "STRING"
+        },
+        "InheritanceModesGene": {
+          "label": "Inh.Pat.",
+          "description": "Inheritance pattern",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING"
+        },
+        "PHENO": {
+          "label": "Pheno",
+          "description": "Phenotype match.",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "INTEGER"
+        },
+        "PICK": {
+          "label": "PICK",
+          "description": "Boolean indicating if this is the VEP picked transcript.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "PolyPhen": {
+          "label": "PolyPhen",
+          "description": "PolyPhen score.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "Protein_position": {
+          "label": "Protein pos",
+          "description": "Position within the protein.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "PUBMED": {
+          "label": "PubMed",
+          "description": "PubMed citations",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "INTEGER"
+        },
+        "SIFT": {
+          "label": "SIFT",
+          "description": "SIFT score.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "SOMATIC": {
+          "label": "Somatic",
+          "description": "Somatic.",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "INTEGER"
+        },
+        "SpliceAI_pred_DS_AG": {
+          "label": "SpliceAI",
+          "description": "SpliceAI.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "SpliceAI_pred_DS_AL": {
+          "label": "SpliceAI",
+          "description": "SpliceAI.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "SpliceAI_pred_DS_DG": {
+          "label": "SpliceAI",
+          "description": "SpliceAI.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "SpliceAI_pred_DS_DL": {
+          "label": "SpliceAI",
+          "description": "SpliceAI.",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "FLOAT"
+        },
+        "STRAND": {
+          "label": "Strand",
+          "description": "The strand of the gene (0=- 1=+).",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "INTEGER"
+        },
+        "SYMBOL": {
+          "label": "Gene",
+          "description": "Gene symbol",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "STRING"
+        },
+        "VIPC": {
+          "label": "VIP",
+          "description": "VIP classification",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "STRING",
+          "required": true
+        },
+        "VIPL": {
+          "label": "VIP labels",
+          "description": "VIP decision tree labels",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "STRING"
+        },
+        "VIPP": {
+          "label": "VIP path",
+          "description": "VIP decision tree path",
+          "numberType": "OTHER",
+          "separator": "&",
+          "type": "STRING",
+          "required": true
+        },
+        "VKGL_CL": {
+          "label": "VKGL",
+          "description": "VKGL consensus classification",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "CATEGORICAL",
+          "categories": [
+            "B",
+            "LB",
+            "VUS",
+            "LP",
+            "P"
+          ]
+        },
+        "VKGL_UMCG": {
+          "label": "MVL",
+          "description": "UMCG managed variant list classification",
+          "numberType": "NUMBER",
+          "numberCount": 1,
+          "type": "CATEGORICAL",
+          "categories": [
+            "B",
+            "LB",
+            "VUS",
+            "LP",
+            "P"
+          ]
+        }
+      }
+    }
+  }
+}
