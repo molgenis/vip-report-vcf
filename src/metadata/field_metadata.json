@@ -288,7 +288,7 @@
         },
         "STRAND": {
           "label": "Strand",
-          "description": "The strand of the gene.",
+          "description": "The strand of the gene (0=- 1=+).",
           "numberType": "NUMBER",
           "numberCount": 1,
           "type": "INTEGER"

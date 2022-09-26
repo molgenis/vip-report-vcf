@@ -40,7 +40,6 @@ test("is vep info metadata - false", () => {
 });
 
 test("create vep metadata", () => {
-  console.log(createVepInfoMetadata(vepInfoMetadata).items[0].parent);
   expect(createVepInfoMetadata(vepInfoMetadata)).toStrictEqual({
     separator: "|",
     items: [
@@ -76,7 +75,7 @@ test("create vep metadata", () => {
       },
       {
         id: "STRAND",
-        description: "The strand of the gene.",
+        description: "The strand of the gene (0=- 1=+).",
         label: "Strand",
         number: { type: "NUMBER", count: 1 },
         type: "INTEGER",
