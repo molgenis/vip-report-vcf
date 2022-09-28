@@ -19,14 +19,14 @@ export interface NestedFields {
 }
 
 interface NestedField {
-  numberType: NumberType;
-  numberCount: number;
   type: ValueType;
-  categories: string[] | undefined;
-  required: boolean;
-  separator: string | undefined;
-  label: string | undefined;
-  description: string | undefined;
+  label: string;
+  description: string;
+  numberType: NumberType;
+  numberCount?: number;
+  categories?: string[];
+  required?: boolean;
+  separator?: string;
 }
 
 export function isVepInfoMetadata(infoMetadata: InfoMetadata): boolean {
