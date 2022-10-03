@@ -35,14 +35,14 @@
           "description": "Position within the cDNA.",
           "numberType": "NUMBER",
           "numberCount": 1,
-          "type": "INTEGER"
+          "type": "STRING"
         },
         "CDS_position": {
           "label": "CDS pos",
           "description": "Position within the coding sequence.",
           "numberType": "NUMBER",
           "numberCount": 1,
-          "type": "INTEGER"
+          "type": "STRING"
         },
         "CLIN_SIG": {
           "label": "ClinVar",
@@ -235,7 +235,7 @@
           "description": "Position within the protein.",
           "numberType": "NUMBER",
           "numberCount": 1,
-          "type": "INTEGER"
+          "type": "STRING"
         },
         "PUBMED": {
           "label": "PubMed",
