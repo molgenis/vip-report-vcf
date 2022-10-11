@@ -32,7 +32,7 @@ export function parseRecordSample(
     const field = formatFields[i];
     recordSample[field] = parseFormatValue(parts[i], formatMetadataContainer[field]);
     if (formatMetadataContainer[field].id === "AD") {
-      recordSample["VIAB"] = calculateAllelicBalance(recordSample[field] as number[]);
+      recordSample["VIAB"] = calculateAlleleBalance(recordSample[field] as number[]);
     }
   }
   return recordSample;
@@ -48,7 +48,7 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
   return value;
 }
 
-export function calculateAllelicBalance(allelicDepth: number[]): ValueInteger {
+export function calculateAlleleBalance(allelicDepth: number[]): ValueInteger {
   const total = allelicDepth.reduce((x, y) => x + y);
   return total != 0 ? allelicDepth[0] / total : null;
 }
