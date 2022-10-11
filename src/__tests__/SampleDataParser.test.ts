@@ -64,6 +64,10 @@ test("calculate balance balance - balance", () => {
   expect(calculateAllelicDepth([50, 50])).toStrictEqual(0.5);
 });
 
+test("calculate balance balance - 0", () => {
+  expect(calculateAllelicDepth([0, 0])).toStrictEqual(null);
+});
+
 const dpFormatMetadata: FieldMetadata = {
   id: "DP",
   number: { type: "NUMBER", count: 1 },
