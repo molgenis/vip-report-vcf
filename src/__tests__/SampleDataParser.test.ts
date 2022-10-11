@@ -1,4 +1,10 @@
-import { determineGenotypeType, parseFormatValue, parseGenotype, parseRecordSample } from "../SampleDataParser";
+import {
+  calculateAllelicDepth,
+  determineGenotypeType,
+  parseFormatValue,
+  parseGenotype,
+  parseRecordSample,
+} from "../SampleDataParser";
 import { FieldMetadata } from "../MetadataParser";
 import { expect, test } from "vitest";
 
@@ -48,6 +54,14 @@ test("parse genotype - multiple phased", () => {
 
 test("parse genotype - multiple unphased", () => {
   expect(parseGenotype("1/1")).toStrictEqual({ a: [1, 1], p: false, t: "hom_a" });
+});
+
+test("calculate balance balance - imbalance", () => {
+  expect(calculateAllelicDepth([15, 85])).toStrictEqual(0.15);
+});
+
+test("calculate balance balance - balance", () => {
+  expect(calculateAllelicDepth([50, 50])).toStrictEqual(0.5);
 });
 
 const dpFormatMetadata: FieldMetadata = {

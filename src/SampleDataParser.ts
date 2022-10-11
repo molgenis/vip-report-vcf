@@ -31,6 +31,9 @@ export function parseRecordSample(
   for (let i = 0; i < parts.length; ++i) {
     const field = formatFields[i];
     recordSample[field] = parseFormatValue(parts[i], formatMetadataContainer[field]);
+    if (formatMetadataContainer[field].id === "AD") {
+      recordSample["AB"] = calculateAllelicDepth(recordSample[field] as ValueArray);
+    }
   }
   return recordSample;
 }
@@ -43,6 +46,14 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
     value = parseValue(token, formatMetadata);
   }
   return value;
+}
+
+export function calculateAllelicDepth(allelicDepth: ValueArray): Value {
+  let total = 0;
+  allelicDepth?.forEach((ad) => {
+    total = total + (ad as number);
+  });
+  return (allelicDepth[0] as number) / total;
 }
 
 export function parseGenotype(token: string): Genotype {
