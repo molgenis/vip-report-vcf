@@ -32,7 +32,7 @@ export function parseRecordSample(
     const field = formatFields[i];
     recordSample[field] = parseFormatValue(parts[i], formatMetadataContainer[field]);
     if (formatMetadataContainer[field].id === "AD") {
-      recordSample["VAB"] = calculateAllelicDepth(recordSample[field] as ValueArray);
+      recordSample["VIAB"] = calculateAllelicDepth(recordSample[field] as ValueArray);
     }
   }
   return recordSample;
