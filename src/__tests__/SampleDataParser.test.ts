@@ -1,5 +1,5 @@
 import {
-  calculateAllelicDepth,
+  calculateAllelicBalance,
   determineGenotypeType,
   parseFormatValue,
   parseGenotype,
@@ -57,15 +57,15 @@ test("parse genotype - multiple unphased", () => {
 });
 
 test("calculate balance balance - imbalance", () => {
-  expect(calculateAllelicDepth([15, 85])).toStrictEqual(0.15);
+  expect(calculateAllelicBalance([15, 85])).toStrictEqual(0.15);
 });
 
 test("calculate balance balance - balance", () => {
-  expect(calculateAllelicDepth([50, 50])).toStrictEqual(0.5);
+  expect(calculateAllelicBalance([50, 50])).toStrictEqual(0.5);
 });
 
 test("calculate balance balance - 0", () => {
-  expect(calculateAllelicDepth([0, 0])).toStrictEqual(null);
+  expect(calculateAllelicBalance([0, 0])).toStrictEqual(null);
 });
 
 const dpFormatMetadata: FieldMetadata = {
