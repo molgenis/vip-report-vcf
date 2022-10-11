@@ -1,6 +1,6 @@
 import { FieldMetadata } from "./MetadataParser";
 import { parseValue } from "./DataParser";
-import { parseIntegerValue, Value, ValueArray } from "./ValueParser";
+import { parseIntegerValue, Value, ValueArray, ValueInteger } from "./ValueParser";
 
 export interface RecordSample {
   [index: string]: RecordSampleType;
@@ -31,6 +31,9 @@ export function parseRecordSample(
   for (let i = 0; i < parts.length; ++i) {
     const field = formatFields[i];
     recordSample[field] = parseFormatValue(parts[i], formatMetadataContainer[field]);
+    if (formatMetadataContainer[field].id === "AD") {
+      recordSample["VIAB"] = calculateAlleleBalance(recordSample[field] as number[]);
+    }
   }
   return recordSample;
 }
@@ -43,6 +46,11 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
     value = parseValue(token, formatMetadata);
   }
   return value;
+}
+
+export function calculateAlleleBalance(allelicDepth: number[]): ValueInteger {
+  const total = allelicDepth.reduce((x, y) => x + y);
+  return total != 0 ? allelicDepth[0] / total : null;
 }
 
 export function parseGenotype(token: string): Genotype {
