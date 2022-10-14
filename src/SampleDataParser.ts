@@ -48,7 +48,11 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
   return value;
 }
 
-export function calculateAlleleBalance(allelicDepth: number[]): ValueInteger {
+export function calculateAlleleBalance(allelicDepthParam: (number | null)[]): ValueInteger {
+  if (allelicDepthParam.includes(null)) {
+    return null;
+  }
+  const allelicDepth: number[] = allelicDepthParam as number[];
   const total = allelicDepth.reduce((x, y) => x + y);
   return total != 0 ? allelicDepth[0] / total : null;
 }
