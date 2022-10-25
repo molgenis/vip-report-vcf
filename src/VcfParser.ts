@@ -13,6 +13,13 @@ import { parseValue } from "./DataParser";
 import { FormatMetadataContainer, parseRecordSample, RecordSample } from "./SampleDataParser";
 import { Metadata, Record } from "./Vcf";
 
+const viabFormatMeta: FieldMetadata = {
+  id: "VIAB",
+  number: { type: "NUMBER", count: 1 },
+  type: "FLOAT",
+  description: "VIP calculated allele balance",
+};
+
 export interface Container {
   metadata: Metadata;
   data: Record[];
@@ -67,6 +74,9 @@ function parseMetadataLine(line: string, metadata: Metadata) {
   } else if (line.startsWith("##FORMAT")) {
     const formatMetadata = parseFormatMetadata(line);
     metadata.format[formatMetadata.id] = formatMetadata;
+    if (formatMetadata.id === "AD") {
+      metadata.format["VIAB"] = viabFormatMeta;
+    }
   }
 }
 
