@@ -259,29 +259,29 @@
           "type": "INTEGER"
         },
         "SpliceAI_pred_DS_AG": {
-          "label": "SpliceAI",
-          "description": "SpliceAI.",
+          "label": "SpliceAI AG",
+          "description": "SpliceAI Delta score (acceptor gain).",
           "numberType": "NUMBER",
           "numberCount": 1,
           "type": "FLOAT"
         },
         "SpliceAI_pred_DS_AL": {
-          "label": "SpliceAI",
-          "description": "SpliceAI.",
+          "label": "SpliceAI AL",
+          "description": "SpliceAI Delta score (acceptor loss).",
           "numberType": "NUMBER",
           "numberCount": 1,
           "type": "FLOAT"
         },
         "SpliceAI_pred_DS_DG": {
-          "label": "SpliceAI",
-          "description": "SpliceAI.",
+          "label": "SpliceAI DG",
+          "description": "SpliceAI Delta score (donor gain).",
           "numberType": "NUMBER",
           "numberCount": 1,
           "type": "FLOAT"
         },
         "SpliceAI_pred_DS_DL": {
-          "label": "SpliceAI",
-          "description": "SpliceAI.",
+          "label": "SpliceAI DL",
+          "description": "SpliceAI Delta score (donor loss).",
           "numberType": "NUMBER",
           "numberCount": 1,
           "type": "FLOAT"
