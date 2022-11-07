@@ -3,6 +3,7 @@
   "version": "1.3.3",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
+    "preinstall": "curl --no-progress-meter --location https://github.com/molgenis/vip-utils/releases/download/v1.1.3/field_metadata.json --create-dirs --output src/metadata/field_metadata.json",
     "build": "tsc --build",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
