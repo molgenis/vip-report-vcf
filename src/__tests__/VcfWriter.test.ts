@@ -35,9 +35,10 @@ test("parse and write vcf: Samples filtered", () => {
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:GQ:HQ\t0/1:.:4,5\t1/1
+1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0/1:20,80:.:4,5\t1/1
 `;
   expect(writeVcf(parseVcf(vcfSamples), { samples: ["SAMPLE1", "SAMPLE2"] })).toBe(expectedVcfSamples);
 });
@@ -47,6 +48,7 @@ test("parse and write vcf: Samples none", () => {
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
 1\t1\t.\tA\tG\t.\t.\t.
@@ -124,7 +126,8 @@ const vcfSamples = `##fileformat=VCFv4.2
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:GQ:HQ\t0|1:1:2,3\t0/1:.:4,5\t1/1
+1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0|1:1,50:1:2,3\t0/1:20,80:.:4,5\t1/1
 `;
