@@ -56,6 +56,18 @@ test("parse and write vcf: Samples none", () => {
   expect(writeVcf(parseVcf(vcfSamples), { samples: [] })).toBe(expectedVcfSamples);
 });
 
+test("parse and write vcf: Samples missing values", () => {
+  const expectedVcfSamplesMissingValues = `##fileformat=VCFv4.2
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##contig=<ID=1,length=249250621,assembly=b37>
+#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
+1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t0|1:.:1\t0/1:.,.:2\t1/1:.,4:3
+`;
+  expect(writeVcf(parseVcf(vcfSamplesMissingValues))).toBe(expectedVcfSamplesMissingValues);
+});
+
 const vcfIdRefAltQualFilter = `##fileformat=VCFv4.2
 ##FILTER=<ID=q10,Description="Quality below 10">
 ##FILTER=<ID=q20,Description="Quality below 20">
@@ -130,4 +142,13 @@ const vcfSamples = `##fileformat=VCFv4.2
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
 1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0|1:1,50:1:2,3\t0/1:20,80:.:4,5\t1/1
+`;
+
+const vcfSamplesMissingValues = `##fileformat=VCFv4.2
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##contig=<ID=1,length=249250621,assembly=b37>
+#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
+1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t0|1:.:1\t0/1:.,.:2\t1/1:.,4:3
 `;

@@ -144,14 +144,19 @@ function writeFieldValueSingle(field: FieldMetadata, value: Value, missingValue 
   return vcf;
 }
 
-function writeFieldValueMultiple(field: FieldMetadata, values: ValueArray, separator: string): string {
+function writeFieldValueMultiple(
+  field: FieldMetadata,
+  values: ValueArray,
+  separator: string,
+  missingValue = MISSING
+): string {
   const vcf = [];
 
   for (const infoValue of values) {
     if (field.nested) {
       vcf.push(writeFieldValueNested(field.nested, infoValue as ValueArray));
     } else {
-      vcf.push(writeFieldValue(field, infoValue, ""));
+      vcf.push(writeFieldValue(field, infoValue, missingValue));
     }
   }
 
@@ -164,7 +169,7 @@ function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: V
     if (infoField.number.count === 1) {
       vcf.push(writeFieldValueSingle(infoField, nestedValues[index], ""));
     } else {
-      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index] as ValueArray, "&"));
+      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index] as ValueArray, "&", ""));
     }
   }
   return vcf.join(nestedField.separator);
