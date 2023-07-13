@@ -1,6 +1,6 @@
 {
   "name": "@molgenis/vip-report-vcf",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
     "preinstall": "curl --no-progress-meter --location https://github.com/molgenis/vip-utils/releases/download/v1.3.0/field_metadata.json --create-dirs --output src/metadata/field_metadata.json",

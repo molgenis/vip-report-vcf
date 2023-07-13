@@ -63,7 +63,7 @@ test("parse and write vcf: Samples missing values", () => {
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t0|1:.:1\t0/1:.,.:2\t1/1:.,4:3
+1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t.|1:.:1\t0/.:.,.:2\t1/1:.,4:3
 `;
   expect(writeVcf(parseVcf(vcfSamplesMissingValues))).toBe(expectedVcfSamplesMissingValues);
 });
@@ -150,5 +150,5 @@ const vcfSamplesMissingValues = `##fileformat=VCFv4.2
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t0|1:.:1\t0/1:.,.:2\t1/1:.,4:3
+1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t.|1:.:1\t0/.:.,.:2\t1/1:.,4:3
 `;
