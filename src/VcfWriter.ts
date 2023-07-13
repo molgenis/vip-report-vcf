@@ -238,5 +238,6 @@ function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): 
 }
 
 function writeSampleValueGt(formatField: FieldMetadata, value: Genotype) {
-  return value.a.join(value.p ? "|" : "/");
+  const vcfValues = value.a.map((alleleIndex) => (alleleIndex != null ? alleleIndex : MISSING));
+  return vcfValues.join(value.p ? "|" : "/");
 }
