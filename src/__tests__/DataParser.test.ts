@@ -29,7 +29,7 @@ test("parse single value", () => {
       number: { type: "NUMBER", count: 1 },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toBe(12);
 });
 
@@ -44,7 +44,7 @@ test("parse multiple value", () => {
       number: { type: "OTHER", separator: "&" },
       type: "INTEGER",
       description: "Integers",
-    })
+    }),
   ).toStrictEqual([1, 2]);
 });
 
@@ -69,7 +69,7 @@ test("parse value - number", () => {
       number: { type: "NUMBER", count: 1 },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toBe(12);
 });
 
@@ -80,7 +80,7 @@ test("parse value - number multiple", () => {
       number: { type: "NUMBER", count: 2, separator: "," },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toStrictEqual([1, 2]);
 });
 
@@ -91,7 +91,7 @@ test("parse value - number multiple characters with separator", () => {
       number: { type: "NUMBER", count: 2, separator: "," },
       type: "CHARACTER",
       description: "Character",
-    })
+    }),
   ).toStrictEqual(["x", "y"]);
 });
 
@@ -102,7 +102,7 @@ test("parse value - number multiple characters without separator", () => {
       number: { type: "NUMBER", count: 2, separator: "," },
       type: "CHARACTER",
       description: "Character",
-    })
+    }),
   ).toStrictEqual(["x", "y"]);
 });
 
@@ -113,7 +113,7 @@ test("parse value - per alt", () => {
       number: { type: "PER_ALT", separator: "," },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toStrictEqual([1, 2]);
 });
 
@@ -124,7 +124,7 @@ test("parse value - per alt and ref", () => {
       number: { type: "PER_ALT_AND_REF", separator: "," },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toStrictEqual([1, 2]);
 });
 
@@ -135,7 +135,7 @@ test("parse value - per genotype", () => {
       number: { type: "PER_GENOTYPE", separator: "," },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toStrictEqual([1, 2]);
 });
 
@@ -146,7 +146,7 @@ test("parse value - other", () => {
       number: { type: "OTHER", separator: "," },
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toStrictEqual([]);
 });
 
@@ -157,6 +157,6 @@ test("parse value - invalid", () => {
       number: { type: "xx", separator: "," } as unknown as NumberMetadata,
       type: "INTEGER",
       description: "Integer",
-    })
+    }),
   ).toThrow("invalid number type");
 });

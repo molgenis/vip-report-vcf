@@ -97,7 +97,7 @@ test("parse record sample", () => {
     parseRecordSample("0|1:5", ["GT", "DP"], {
       GT: gtFormatMetadata,
       DP: dpFormatMetadata,
-    })
+    }),
   ).toStrictEqual({ GT: { a: [0, 1], p: true, t: "het" }, DP: 5 });
 });
 
@@ -106,6 +106,6 @@ test("parse record sample - drop trailing fields", () => {
     parseRecordSample("0|1", ["GT", "DP"], {
       GT: gtFormatMetadata,
       DP: dpFormatMetadata,
-    })
+    }),
   ).toStrictEqual({ GT: { a: [0, 1], p: true, t: "het" } });
 });
