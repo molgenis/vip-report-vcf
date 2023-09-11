@@ -31,14 +31,14 @@ function writeHeader(metadata: Metadata, filter: Filter): string {
           line
             .split("\t")
             .filter((token, index) => index <= 7)
-            .join("\t")
+            .join("\t"),
         );
       } else {
         vcf.push(
           line
             .split("\t")
             .filter((token, index) => index <= 8 || filter.samples?.indexOf(token) !== -1)
-            .join("\t")
+            .join("\t"),
         );
       }
     } else {
@@ -148,7 +148,7 @@ function writeFieldValueMultiple(
   field: FieldMetadata,
   values: ValueArray,
   separator: string,
-  missingValue = MISSING
+  missingValue = MISSING,
 ): string {
   const vcf = [];
 

@@ -23,7 +23,7 @@ export interface FormatMetadataContainer {
 export function parseRecordSample(
   token: string,
   formatFields: string[],
-  formatMetadataContainer: FormatMetadataContainer
+  formatMetadataContainer: FormatMetadataContainer,
 ): RecordSample {
   const parts = token.split(":");
 

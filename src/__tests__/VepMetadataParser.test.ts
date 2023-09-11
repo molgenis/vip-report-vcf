@@ -23,7 +23,7 @@ test("is vep info metadata - non CSQ", () => {
       type: "STRING",
       description: "Consequence annotations from Ensembl VEP. Format: X|Y",
       required: true,
-    })
+    }),
   ).toBe(true);
 });
 
