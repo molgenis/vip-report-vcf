@@ -1,33 +1,8 @@
 import { InfoMetadata, NestedFieldMetadata, NumberMetadata, NumberType, ValueType } from "./MetadataParser";
 import metadataJson from "./metadata/field_metadata.json";
+import { Metadata, Field, NestedMetadata } from "./FieldMetadata";
 
 const REG_EXP_VEP = /Consequence annotations from Ensembl VEP. Format: (.+)/;
-
-export interface Metadata {
-  info: NestedMetadatas;
-}
-export interface NestedMetadatas {
-  [index: string]: NestedMetadata;
-}
-
-export interface NestedMetadata {
-  nestedFields: NestedFields;
-}
-
-export interface NestedFields {
-  [index: string]: NestedField;
-}
-
-interface NestedField {
-  type: ValueType;
-  label: string;
-  description: string;
-  numberType: NumberType;
-  numberCount?: number;
-  categories?: string[];
-  required?: boolean;
-  separator?: string;
-}
 
 export function isVepInfoMetadata(infoMetadata: InfoMetadata): boolean {
   return infoMetadata.description !== undefined && REG_EXP_VEP.test(infoMetadata.description);
@@ -63,7 +38,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string): InfoMe
   const meta = metadataJson as Metadata;
   const nestedMetadata: NestedMetadata = meta.info["CSQ"];
   const nestedFields = nestedMetadata.nestedFields;
-  const fieldMetadata: NestedField = nestedFields[token];
+  const fieldMetadata: Field = nestedFields[token];
 
   if (fieldMetadata !== undefined) {
     numberType = fieldMetadata.numberType;
