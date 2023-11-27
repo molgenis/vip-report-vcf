@@ -1,5 +1,7 @@
 import { parseIntegerValueNonNull, parseStringValueNonNull } from "./ValueParser";
 import { createVepInfoMetadata, isVepInfoMetadata } from "./VepMetadataParser";
+import metadataJson from "./metadata/field_metadata.json";
+import { Metadata, Field } from "./FieldMetadata";
 
 export type NumberType = "NUMBER" | "PER_ALT" | "PER_ALT_AND_REF" | "PER_GENOTYPE" | "OTHER";
 
@@ -106,13 +108,39 @@ export function parseFormatMetadata(token: string): FieldMetadata {
   if (result === null) {
     throw new Error(`invalid format metadata '${token}'`);
   }
+  const identifier = parseStringValueNonNull(result[1]);
+  const meta = metadataJson as Metadata;
 
-  return {
-    id: parseStringValueNonNull(result[1]),
-    number: parseNumberMetadata(result[2]),
-    type: parseValueType(result[3]),
-    description: parseStringValueNonNull(result[4]),
+  let number: NumberMetadata;
+  let type: ValueType;
+  let categories: string[] | undefined;
+  let required;
+  let label, description: string | undefined;
+
+  if (meta.format !== undefined && meta.format[identifier] !== undefined) {
+    const fieldMetadata: Field = meta.format[identifier];
+    number = { type: fieldMetadata.numberType, count: fieldMetadata.numberCount, separator: fieldMetadata.separator };
+    type = fieldMetadata.type;
+    required = fieldMetadata.required !== undefined ? fieldMetadata.required : false;
+    label = fieldMetadata.label;
+    description = fieldMetadata.description;
+    categories = fieldMetadata.categories;
+  } else {
+    number = parseNumberMetadata(result[2]);
+    type = parseValueType(result[3]);
+    description = parseStringValueNonNull(result[4]);
+  }
+  const metadata: FieldMetadata = {
+    id: identifier,
+    number: number,
+    type: type,
   };
+  if (categories) metadata.categories = categories;
+  if (required) metadata.required = required;
+  if (label) metadata.label = label;
+  if (description) metadata.description = description;
+
+  return metadata;
 }
 
 const REG_EXP_INFO =
