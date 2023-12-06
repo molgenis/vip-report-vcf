@@ -65,6 +65,20 @@ test("parse format metadata", () => {
   });
 });
 
+test("parse format metadata from json", () => {
+  const token =
+    '##FORMAT=<ID=VI,Number=.,Type=String,Description="An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD">';
+  expect(parseFormatMetadata(token)).toStrictEqual({
+    id: "VI",
+    number: { type: "OTHER", count: undefined, separator: "," },
+    type: "CATEGORICAL",
+    categories: ["AD", "AD_IP", "AR", "AR_C", "XLD", "XLR"],
+    label: "Inheritance",
+    description:
+      "An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD",
+  });
+});
+
 test("parse format metadata - invalid", () => {
   expect(() => parseFormatMetadata("xx")).toThrow("invalid format metadata 'xx'");
 });
