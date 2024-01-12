@@ -1,9 +1,9 @@
 {
   "name": "@molgenis/vip-report-vcf",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
-    "preinstall": "curl --no-progress-meter --location https://github.com/molgenis/vip-utils/releases/download/v1.4.5/field_metadata.json --create-dirs --output src/metadata/field_metadata.json",
+    "preinstall": "curl --no-progress-meter --location https://github.com/molgenis/vip-utils/releases/download/v1.4.6/field_metadata.json --create-dirs --output src/metadata/field_metadata.json",
     "build": "tsc --build",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
