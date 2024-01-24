@@ -3,4 +3,3 @@ dist
 /.idea/
 coverage
 /.vscode/
-src/metadata/field_metadata.json

@@ -1,7 +1,6 @@
 import { parseIntegerValueNonNull, parseStringValueNonNull } from "./ValueParser";
 import { createVepInfoMetadata, isVepInfoMetadata } from "./VepMetadataParser";
-import metadataJson from "./metadata/field_metadata.json";
-import { Metadata, Field } from "./FieldMetadata";
+import { Field, NestedFields, NestedMetadatas } from "./FieldMetadata";
 
 export type NumberType = "NUMBER" | "PER_ALT" | "PER_ALT_AND_REF" | "PER_GENOTYPE" | "OTHER";
 
@@ -103,13 +102,16 @@ export interface InfoMetadata extends FieldMetadata {
 }
 const REG_EXP_FORMAT = /##FORMAT=<ID=(.+?),Number=(.+?),Type=(.+?),Description="(.+?)">/;
 
-export function parseFormatMetadata(token: string): FieldMetadata {
+/**
+ * @param token VCF format header line
+ * @param meta VCF format metadata not stored in the VCF e.g. to describe categorical data
+ */
+export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMetadata {
   const result = token.match(REG_EXP_FORMAT);
   if (result === null) {
     throw new Error(`invalid format metadata '${token}'`);
   }
   const identifier = parseStringValueNonNull(result[1]);
-  const meta = metadataJson as Metadata;
 
   let number: NumberMetadata;
   let type: ValueType;
@@ -117,8 +119,8 @@ export function parseFormatMetadata(token: string): FieldMetadata {
   let required;
   let label, description: string | undefined;
 
-  if (meta.format !== undefined && meta.format[identifier] !== undefined) {
-    const fieldMetadata: Field = meta.format[identifier];
+  if (meta !== undefined && meta[identifier] !== undefined) {
+    const fieldMetadata: Field = meta[identifier];
     number = { type: fieldMetadata.numberType, count: fieldMetadata.numberCount, separator: fieldMetadata.separator };
     type = fieldMetadata.type;
     required = fieldMetadata.required !== undefined ? fieldMetadata.required : false;
@@ -146,7 +148,11 @@ export function parseFormatMetadata(token: string): FieldMetadata {
 const REG_EXP_INFO =
   /##INFO=<ID=(.+?),Number=(.+?),Type=(.+?),Description="(.+?)"(?:,Source="(.+?)")?(?:,Version="(.+?)")?>/;
 
-export function parseInfoMetadata(token: string): InfoMetadata {
+/**
+ * @param token VCF info header line
+ * @param meta VCF info metadata not stored in the VCF e.g. to describe nested data from VEP
+ */
+export function parseInfoMetadata(token: string, meta?: NestedMetadatas): InfoMetadata {
   const result = token.match(REG_EXP_INFO);
   if (result === null) {
     throw new Error(`invalid info metadata '${token}'`);
@@ -168,17 +174,17 @@ export function parseInfoMetadata(token: string): InfoMetadata {
     infoMetadata.version = version;
   }
 
-  const nested = createNestedInfoMetadata(infoMetadata);
+  const nested = createNestedInfoMetadata(infoMetadata, meta);
   if (nested != null) {
     infoMetadata.nested = nested;
   }
   return infoMetadata;
 }
 
-function createNestedInfoMetadata(infoMetadata: InfoMetadata): NestedFieldMetadata | null {
+function createNestedInfoMetadata(infoMetadata: InfoMetadata, meta?: NestedMetadatas): NestedFieldMetadata | null {
   let nestedInfoMetadata: NestedFieldMetadata | null;
   if (isVepInfoMetadata(infoMetadata)) {
-    nestedInfoMetadata = createVepInfoMetadata(infoMetadata);
+    nestedInfoMetadata = createVepInfoMetadata(infoMetadata, meta);
   } else {
     nestedInfoMetadata = null;
   }

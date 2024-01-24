@@ -12,6 +12,7 @@ import { FieldMetadata, parseFormatMetadata, parseInfoMetadata } from "./Metadat
 import { parseValue } from "./DataParser";
 import { FormatMetadataContainer, parseRecordSample, RecordSample } from "./SampleDataParser";
 import { Metadata, Record } from "./Vcf";
+import { Metadata as ExternalMetadata } from "./FieldMetadata";
 
 const viabFormatMeta: FieldMetadata = {
   id: "VIAB",
@@ -33,8 +34,12 @@ export interface InfoContainer {
   [index: string]: Value | ValueArray;
 }
 
-export function parseVcf(vcf: string): Container {
-  const container = {
+/**
+ * @param vcf VCF file contents
+ * @param meta additional VCF metadata e.g. to describe categorical or nested data
+ */
+export function parseVcf(vcf: string, meta?: ExternalMetadata): Container {
+  const container: Container = {
     metadata: {
       lines: [],
       info: {},
@@ -43,6 +48,7 @@ export function parseVcf(vcf: string): Container {
     },
     data: [],
   };
+  if (meta) container.metadata.external = meta;
 
   for (const line of vcf.split(/\r?\n/)) {
     if (line.length !== 0) {
@@ -69,10 +75,10 @@ function parseLine(line: string, vcf: Container) {
 
 function parseMetadataLine(line: string, metadata: Metadata) {
   if (line.startsWith("##INFO")) {
-    const infoMetadata = parseInfoMetadata(line);
+    const infoMetadata = parseInfoMetadata(line, metadata.external?.info);
     metadata.info[infoMetadata.id] = infoMetadata;
   } else if (line.startsWith("##FORMAT")) {
-    const formatMetadata = parseFormatMetadata(line);
+    const formatMetadata = parseFormatMetadata(line, metadata.external?.format);
     metadata.format[formatMetadata.id] = formatMetadata;
     if (formatMetadata.id === "AD") {
       metadata.format["VIAB"] = viabFormatMeta;

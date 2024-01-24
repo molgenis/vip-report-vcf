@@ -6,6 +6,8 @@ import {
   parseValueType,
 } from "../MetadataParser";
 import { expect, test } from "vitest";
+import metadataJson from "./field_metadata.json";
+import { Metadata } from "../FieldMetadata";
 
 test("parse number metadata - A", () => {
   expect(parseNumberMetadata("A")).toStrictEqual({ type: "PER_ALT", separator: "," });
@@ -66,9 +68,10 @@ test("parse format metadata", () => {
 });
 
 test("parse format metadata from json", () => {
+  const meta = metadataJson as Metadata;
   const token =
     '##FORMAT=<ID=VI,Number=.,Type=String,Description="An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD, YL, MT">';
-  expect(parseFormatMetadata(token)).toStrictEqual({
+  expect(parseFormatMetadata(token, meta.format)).toStrictEqual({
     id: "VI",
     number: { type: "OTHER", count: undefined, separator: "," },
     type: "CATEGORICAL",
