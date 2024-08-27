@@ -51,7 +51,7 @@ export function parseNumberMetadata(token: string): NumberMetadata {
   return numberMetaData;
 }
 
-export type ValueType = "CATEGORICAL" | "CHARACTER" | "INTEGER" | "FLAG" | "FLOAT" | "STRING";
+export type ValueType = "CATEGORICAL" | "CHARACTER" | "INTEGER" | "FLAG" | "FLOAT" | "STRING" | "RANGE";
 
 export function parseValueType(token: string): ValueType {
   let type: ValueType;

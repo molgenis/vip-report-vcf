@@ -1,6 +1,6 @@
 {
   "name": "@molgenis/vip-report-vcf",
-  "version": "2.0.2",
+  "version": "2.0.2-poc-str",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
     "build": "tsc --build",
