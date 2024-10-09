@@ -79,13 +79,20 @@ export function parseValueType(token: string): ValueType {
   return type;
 }
 
-export interface FieldMetadata {
-  id: string;
-  number: NumberMetadata;
-  type: ValueType;
+export type Id = string;
+
+export type Identifiable = {
+  id: Id;
   label?: string;
   description?: string;
-  categories?: string[];
+};
+
+export type Category = Identifiable;
+
+export interface FieldMetadata extends Identifiable {
+  number: NumberMetadata;
+  type: ValueType;
+  categories?: Category[];
   required?: boolean;
   nested?: NestedFieldMetadata;
   parent?: FieldMetadata;
@@ -100,6 +107,7 @@ export interface InfoMetadata extends FieldMetadata {
   source?: string;
   version?: string;
 }
+
 const REG_EXP_FORMAT = /##FORMAT=<ID=(.+?),Number=(.+?),Type=(.+?),Description="(.+?)">/;
 
 /**
@@ -115,7 +123,7 @@ export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMe
 
   let number: NumberMetadata;
   let type: ValueType;
-  let categories: string[] | undefined;
+  let categories: Category[] | undefined;
   let required;
   let label, description: string | undefined;
 

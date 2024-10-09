@@ -1,9 +1,10 @@
-import { NumberType, ValueType } from "./MetadataParser";
+import { Category, NumberType, ValueType } from "./MetadataParser";
 
 export interface Metadata {
   info: NestedMetadatas;
   format: NestedFields;
 }
+
 export interface NestedMetadatas {
   [index: string]: NestedMetadata;
 }
@@ -22,7 +23,7 @@ export interface Field {
   description: string;
   numberType: NumberType;
   numberCount?: number;
-  categories?: string[];
+  categories?: Category[];
   required?: boolean;
   separator?: string;
 }

@@ -68,17 +68,45 @@ test("parse format metadata", () => {
 });
 
 test("parse format metadata from json", () => {
-  const meta = metadataJson as Metadata;
+  const meta = metadataJson as unknown as Metadata;
   const token =
     '##FORMAT=<ID=VI,Number=.,Type=String,Description="An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD, YL, MT">';
   expect(parseFormatMetadata(token, meta.format)).toStrictEqual({
     id: "VI",
     number: { type: "OTHER", count: undefined, separator: "," },
     type: "CATEGORICAL",
-    categories: ["AD", "AD_IP", "AR", "AR_C", "XLD", "XLR", "YL", "MT"],
+    categories: [
+      {
+        id: "AD",
+        label: "AD",
+        description: "Autosomal Dominant",
+      },
+      {
+        id: "AD_IP",
+        label: "AD incomplete penetrance",
+        description: "Autosomal dominant incomplete penetrance",
+      },
+      {
+        id: "AR",
+        label: "AR",
+        description: "Autosomal recessive",
+      },
+      {
+        id: "AR_C",
+        label: "AR compound hetrozygote",
+        description: "Autosomal recessive compound hetrozygote",
+      },
+      { id: "XLD", label: "XLD", description: "X-linked dominant" },
+      {
+        id: "XLR",
+        label: "XLR",
+        description: "X-linked recessive",
+      },
+      { id: "YL", label: "YL", description: "Y-linked" },
+      { id: "MT", label: "MT", description: "Mitochondrial" },
+    ],
     label: "Inheritance",
-    description:
-      "An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD, YL, MT",
+    description: "An enumeration of possible inheritance modes based on the pedigree of the sample",
   });
 });
 

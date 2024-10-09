@@ -1,4 +1,4 @@
-import { InfoMetadata, NestedFieldMetadata, NumberMetadata, NumberType, ValueType } from "./MetadataParser";
+import { Category, InfoMetadata, NestedFieldMetadata, NumberMetadata, NumberType, ValueType } from "./MetadataParser";
 import { Field, NestedMetadata, NestedMetadatas } from "./FieldMetadata";
 
 const REG_EXP_VEP = /Consequence annotations from Ensembl VEP. Format: (.+)/;
@@ -30,7 +30,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string, meta?: 
   let numberCount;
   let separator: string | undefined;
   let type: ValueType;
-  let categories: string[] | undefined;
+  let categories: Category[] | undefined;
   let required;
   let label, description: string | undefined;
 
