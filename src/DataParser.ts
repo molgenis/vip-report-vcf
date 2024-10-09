@@ -1,5 +1,5 @@
-import { InfoMetadata, NestedFieldMetadata } from "./MetadataParser";
-import { parseTypedValue, Value, ValueArray } from "./ValueParser";
+import { parseTypedValue } from "./ValueParser";
+import { InfoMetadata, NestedFieldMetadata, Value, ValueArray } from "./types/Vcf";
 
 export function parseValue(token: string, infoMetadata: InfoMetadata): Value | ValueArray {
   let value: Value | ValueArray;
@@ -56,8 +56,9 @@ export function parseMultiValue(token: string, infoMetadata: InfoMetadata): Valu
 export function parseNestedValue(token: string, nestedInfoMetadata: NestedFieldMetadata): ValueArray {
   const infoValues: Value[] = [];
   const parts = token.split(nestedInfoMetadata.separator);
+  if (parts.length !== nestedInfoMetadata.items.length) throw new Error(`invalid value '${token}'`);
   for (let i = 0; i < parts.length; ++i) {
-    infoValues.push(parseValue(parts[i], nestedInfoMetadata.items[i]));
+    infoValues.push(parseValue(parts[i]!, nestedInfoMetadata.items[i]!));
   }
   return infoValues;
 }

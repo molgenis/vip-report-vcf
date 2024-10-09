@@ -1,14 +1,6 @@
 import { MISSING } from "./Constants";
-import { ValueType } from "./MetadataParser";
 
-export type Value = ValueCharacter | ValueFlag | ValueFloat | ValueInteger | ValueObject | ValueString | ValueArray;
-export type ValueArray = Array<Value | Array<Value>>;
-export type ValueCharacter = string | null;
-export type ValueFlag = boolean | null;
-export type ValueFloat = number | null;
-export type ValueInteger = number | null;
-export type ValueObject = { [key: string]: Value } | null;
-export type ValueString = string | null;
+import { Value, ValueType } from "./types/Vcf";
 
 export function parseTypedValue(token: string, type: ValueType): Value {
   let value: Value;
@@ -31,7 +23,7 @@ export function parseTypedValue(token: string, type: ValueType): Value {
       value = parseFloatValue(token);
       break;
     default:
-      throw new Error("invalid value type");
+      throw new Error(`invalid value type '${type}'`);
   }
 
   return value;

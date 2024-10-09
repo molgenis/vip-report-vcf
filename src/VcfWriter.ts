@@ -1,15 +1,22 @@
-import { Container, FormatMetadataContainer, Genotype, Metadata, Record, RecordSample } from "./Vcf";
+import {
+  FieldMetadata,
+  FieldMetadataContainer,
+  Filter,
+  FormatMetadataContainer,
+  Genotype,
+  InfoContainer,
+  NestedFieldMetadata,
+  RecordSample,
+  RecordSampleType,
+  Value,
+  ValueArray,
+  VcfContainer,
+  VcfMetadata,
+  VcfRecord,
+} from "./types/Vcf";
 import { MISSING } from "./Constants";
-import { FieldMetadataContainer, InfoContainer } from "./VcfParser";
-import { FieldMetadata, NestedFieldMetadata } from "./MetadataParser";
-import { Value, ValueArray } from "./ValueParser";
-import { RecordSampleType } from "./SampleDataParser";
 
-export type Filter = {
-  samples?: string[];
-};
-
-export function writeVcf(container: Container, filter: Filter = {}): string {
+export function writeVcf(container: VcfContainer, filter: Filter = {}): string {
   const vcf = [];
   vcf.push(writeHeader(container.metadata, filter));
 
@@ -20,7 +27,7 @@ export function writeVcf(container: Container, filter: Filter = {}): string {
   return vcf.join("\n") + "\n";
 }
 
-function writeHeader(metadata: Metadata, filter: Filter): string {
+function writeHeader(metadata: VcfMetadata, filter: Filter): string {
   const vcf = [];
   for (const [index, line] of metadata.lines.entries()) {
     if (index !== metadata.lines.length - 1) {
@@ -48,7 +55,7 @@ function writeHeader(metadata: Metadata, filter: Filter): string {
   return vcf.join("\n");
 }
 
-function writeRecord(metadata: Metadata, record: Record, filter: Filter): string {
+function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): string {
   const vcf = [];
   vcf.push(writeChr(record.c));
   vcf.push(writePos(record.p));
@@ -74,7 +81,7 @@ function filterSamples(sampleIds: string[], samples: RecordSample[], filterSampl
   const filterSamples = [];
   for (const [index, sample] of sampleIds.entries()) {
     if (filterSampleIds.indexOf(sample) !== -1) {
-      filterSamples.push(samples[index]);
+      filterSamples.push(samples[index]!);
     }
   }
   return filterSamples;
@@ -116,7 +123,7 @@ function writeInfo(infoFields: FieldMetadataContainer, infoValues: InfoContainer
   const vcf = [];
   for (const infoField of Object.values(infoFields)) {
     if (infoField.id in infoValues) {
-      vcf.push(writeInfoField(infoField, infoValues[infoField.id]));
+      vcf.push(writeInfoField(infoField, infoValues[infoField.id]!));
     }
   }
   return vcf.join(";");
@@ -167,9 +174,9 @@ function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: V
   const vcf = [];
   for (const [index, infoField] of nestedField.items.entries()) {
     if (infoField.number.count === 1) {
-      vcf.push(writeFieldValueSingle(infoField, nestedValues[index], ""));
+      vcf.push(writeFieldValueSingle(infoField, nestedValues[index]!, ""));
     } else {
-      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index] as ValueArray, "&", ""));
+      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index]! as ValueArray, "&", ""));
     }
   }
   return vcf.join(nestedField.separator);
@@ -207,7 +214,7 @@ function writeString(value: string) {
 }
 
 function writeFormat(samples: RecordSample[]): string {
-  const keys = Object.keys(samples[0]).filter((key) => key !== "VIAB");
+  const keys = Object.keys(samples[0]!).filter((key) => key !== "VIAB");
   return keys.length > 0 ? keys.map(writeString).join(":") : MISSING;
 }
 
@@ -215,7 +222,7 @@ function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample
   const vcf = [];
   for (const [key, value] of Object.entries(sample)) {
     if (key !== "VIAB") {
-      vcf.push(writeSampleValue(formatFields[key], value));
+      vcf.push(writeSampleValue(formatFields[key]!, value));
     }
   }
   return vcf.join(":");

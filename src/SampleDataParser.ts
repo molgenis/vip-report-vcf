@@ -1,24 +1,17 @@
-import { FieldMetadata } from "./MetadataParser";
 import { parseValue } from "./DataParser";
-import { parseIntegerValue, Value, ValueArray, ValueInteger } from "./ValueParser";
-
-export interface RecordSample {
-  [index: string]: RecordSampleType;
-}
-
-export type RecordSampleType = Genotype | Value | ValueArray;
-export type GenotypeAllele = number | null;
-export type GenotypeType = "het" | "hom_a" | "hom_r" | "miss" | "part";
-
-export interface Genotype {
-  a: GenotypeAllele[];
-  p?: boolean;
-  t: GenotypeType;
-}
-
-export interface FormatMetadataContainer {
-  [key: string]: FieldMetadata;
-}
+import { parseIntegerValue } from "./ValueParser";
+import {
+  FieldMetadata,
+  FormatMetadataContainer,
+  Genotype,
+  GenotypeAllele,
+  GenotypeType,
+  RecordSample,
+  RecordSampleType,
+  Value,
+  ValueArray,
+  ValueInteger,
+} from "./types/Vcf";
 
 export function parseRecordSample(
   token: string,
@@ -26,12 +19,16 @@ export function parseRecordSample(
   formatMetadataContainer: FormatMetadataContainer,
 ): RecordSample {
   const parts = token.split(":");
+  if (formatFields.length < parts.length) throw new Error(`invalid value '${token}'`);
 
   const recordSample: RecordSample = {};
   for (let i = 0; i < parts.length; ++i) {
-    const field = formatFields[i];
-    recordSample[field] = parseFormatValue(parts[i], formatMetadataContainer[field]);
-    if (formatMetadataContainer[field].id === "AD") {
+    const field = formatFields[i]!;
+    const fieldMetadata = formatMetadataContainer[field];
+    if (fieldMetadata === undefined) throw new Error(`unknown format field '${field}'`);
+
+    recordSample[field] = parseFormatValue(parts[i]!, fieldMetadata);
+    if (fieldMetadata.id === "AD") {
       recordSample["VIAB"] = calculateAlleleBalance(recordSample[field] as number[]);
     }
   }
@@ -55,11 +52,11 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
  * @return allele balance or null if 1) allele depth array contains a null value 2) total allele depth is zero
  */
 export function calculateAlleleBalance(allelicDepths: ValueInteger[]): ValueInteger {
-  if (allelicDepths.includes(null)) {
+  if (allelicDepths.includes(null) || allelicDepths.length === 0) {
     return null;
   }
   const total = (allelicDepths as number[]).reduce((x, y) => x + y);
-  return total != 0 ? (allelicDepths as number[])[0] / total : null;
+  return total != 0 ? (allelicDepths as number[])[0]! / total : null;
 }
 
 export function parseGenotype(token: string): Genotype {
