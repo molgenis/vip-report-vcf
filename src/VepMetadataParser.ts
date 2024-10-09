@@ -1,10 +1,10 @@
 import {
-  Category,
+  CategoryRecord,
   InfoMetadata,
   NestedFieldMetadata,
-  NullValue,
   NumberMetadata,
   NumberType,
+  ValueDescription,
   ValueType,
 } from "./MetadataParser";
 import { Field, NestedMetadata, NestedMetadatas } from "./FieldMetadata";
@@ -38,8 +38,8 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string, meta?: 
   let numberCount;
   let separator: string | undefined;
   let type: ValueType;
-  let categories: Category[] | undefined;
-  let nullValue: NullValue | undefined;
+  let categories: CategoryRecord | undefined;
+  let nullValue: ValueDescription | undefined;
   let required;
   let label, description: string | undefined;
 

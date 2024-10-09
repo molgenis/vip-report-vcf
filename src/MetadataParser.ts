@@ -79,20 +79,14 @@ export function parseValueType(token: string): ValueType {
   return type;
 }
 
-export type CategoryId = string; // use separate type to ease potential transition to numerical identifiers
-
-export type Category = {
-  id: CategoryId;
-  label: string;
-  description?: string;
-};
-
-export type NullValue = {
-  label: string;
-  description?: string;
-};
-
 export type FieldId = string; // use separate type to ease potential transition to numerical identifiers
+
+export type CategoryId = string; // use separate type to ease potential transition to numerical identifiers
+export type CategoryRecord = Record<CategoryId, ValueDescription>;
+export type ValueDescription = {
+  label: string;
+  description?: string;
+};
 
 export interface FieldMetadata {
   id: FieldId;
@@ -100,9 +94,9 @@ export interface FieldMetadata {
   type: ValueType;
   label?: string;
   description?: string;
-  categories?: Category[];
+  categories?: CategoryRecord;
   required?: boolean;
-  nullValue?: NullValue;
+  nullValue?: ValueDescription;
   nested?: NestedFieldMetadata;
   parent?: FieldMetadata;
 }
@@ -132,8 +126,8 @@ export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMe
 
   let number: NumberMetadata;
   let type: ValueType;
-  let categories: Category[] | undefined;
-  let nullValue: NullValue | undefined;
+  let categories: CategoryRecord | undefined;
+  let nullValue: ValueDescription | undefined;
   let required;
   let label, description: string | undefined;
 
