@@ -6,6 +6,7 @@ import {
   parseRecordSample,
 } from "../SampleDataParser";
 import { expect, test } from "vitest";
+import { FieldMetadata } from "../types/Metadata";
 
 import { FieldMetadata } from "../index";
 
