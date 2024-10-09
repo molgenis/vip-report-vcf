@@ -42,7 +42,7 @@ test("is vep info metadata - false", () => {
 });
 
 test("create vep metadata", () => {
-  const meta = metadataJson as Metadata;
+  const meta = metadataJson as unknown as Metadata;
   expect(createVepInfoMetadata(vepInfoMetadata, meta.info)).toStrictEqual({
     separator: "|",
     items: [
@@ -213,7 +213,7 @@ test("create vep metadata", () => {
           },
           {
             id: "Conflicting_interpretations_of_pathogenicity",
-            label: "Conflicting",
+            label: "Conflicting interpretations",
             description: "Conflicting interpretations of pathogenicity",
           },
         ],
@@ -256,7 +256,7 @@ test("create vep metadata", () => {
           {
             id: "_no_conflicts",
             label: "No conflicts",
-            description: "the classifications agree",
+            description: "The classifications agree",
           },
           {
             id: "_single_submitter",

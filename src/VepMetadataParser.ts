@@ -1,4 +1,12 @@
-import { Category, InfoMetadata, NestedFieldMetadata, NumberMetadata, NumberType, ValueType } from "./MetadataParser";
+import {
+  Category,
+  InfoMetadata,
+  NestedFieldMetadata,
+  NullValue,
+  NumberMetadata,
+  NumberType,
+  ValueType,
+} from "./MetadataParser";
 import { Field, NestedMetadata, NestedMetadatas } from "./FieldMetadata";
 
 const REG_EXP_VEP = /Consequence annotations from Ensembl VEP. Format: (.+)/;
@@ -31,6 +39,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string, meta?: 
   let separator: string | undefined;
   let type: ValueType;
   let categories: Category[] | undefined;
+  let nullValue: NullValue | undefined;
   let required;
   let label, description: string | undefined;
 
@@ -46,6 +55,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string, meta?: 
     label = fieldMetadata.label;
     description = fieldMetadata.description;
     categories = fieldMetadata.categories;
+    nullValue = fieldMetadata.nullValue;
   } else {
     numberType = "NUMBER";
     numberCount = 1;
@@ -68,6 +78,7 @@ function parseVepInfoMetadata(infoMetadata: InfoMetadata, token: string, meta?: 
   };
 
   if (categories) metadata.categories = categories;
+  if (nullValue) metadata.nullValue = nullValue;
   if (required) metadata.required = required;
   if (label) metadata.label = label;
   if (description) metadata.description = description;

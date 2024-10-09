@@ -1,4 +1,4 @@
-import { Category, NumberType, ValueType } from "./MetadataParser";
+import { Category, NullValue, NumberType, ValueType } from "./MetadataParser";
 
 export interface Metadata {
   info: NestedMetadatas;
@@ -24,6 +24,7 @@ export interface Field {
   numberType: NumberType;
   numberCount?: number;
   categories?: Category[];
+  nullValue?: NullValue;
   required?: boolean;
   separator?: string;
 }

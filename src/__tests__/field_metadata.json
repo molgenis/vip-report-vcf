@@ -10,7 +10,7 @@
         {
           "id": "AD",
           "label": "AD",
-          "description": "Autosomal Dominant"
+          "description": "Autosomal dominant"
         },
         {
           "id": "AD_IP",
@@ -202,7 +202,7 @@
             },
             {
               "id": "Conflicting_interpretations_of_pathogenicity",
-              "label": "Conflicting",
+              "label": "Conflicting interpretations",
               "description": "Conflicting interpretations of pathogenicity"
             }
           ]
@@ -237,7 +237,7 @@
             {
               "id": "_no_conflicts",
               "label": "No conflicts",
-              "description": "the classifications agree"
+              "description": "The classifications agree"
             },
             {
               "id": "_single_submitter",

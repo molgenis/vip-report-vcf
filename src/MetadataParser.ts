@@ -79,21 +79,30 @@ export function parseValueType(token: string): ValueType {
   return type;
 }
 
-export type Id = string;
+export type CategoryId = string; // use separate type to ease potential transition to numerical identifiers
 
-export type Identifiable = {
-  id: Id;
-  label?: string;
+export type Category = {
+  id: CategoryId;
+  label: string;
   description?: string;
 };
 
-export type Category = Identifiable;
+export type NullValue = {
+  label: string;
+  description?: string;
+};
 
-export interface FieldMetadata extends Identifiable {
+export type FieldId = string; // use separate type to ease potential transition to numerical identifiers
+
+export interface FieldMetadata {
+  id: FieldId;
   number: NumberMetadata;
   type: ValueType;
+  label?: string;
+  description?: string;
   categories?: Category[];
   required?: boolean;
+  nullValue?: NullValue;
   nested?: NestedFieldMetadata;
   parent?: FieldMetadata;
 }
@@ -124,6 +133,7 @@ export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMe
   let number: NumberMetadata;
   let type: ValueType;
   let categories: Category[] | undefined;
+  let nullValue: NullValue | undefined;
   let required;
   let label, description: string | undefined;
 
@@ -135,6 +145,7 @@ export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMe
     label = fieldMetadata.label;
     description = fieldMetadata.description;
     categories = fieldMetadata.categories;
+    nullValue = fieldMetadata.nullValue;
   } else {
     number = parseNumberMetadata(result[2]);
     type = parseValueType(result[3]);
@@ -146,6 +157,7 @@ export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMe
     type: type,
   };
   if (categories) metadata.categories = categories;
+  if (nullValue) metadata.nullValue = nullValue;
   if (required) metadata.required = required;
   if (label) metadata.label = label;
   if (description) metadata.description = description;

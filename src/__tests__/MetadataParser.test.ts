@@ -79,7 +79,7 @@ test("parse format metadata from json", () => {
       {
         id: "AD",
         label: "AD",
-        description: "Autosomal Dominant",
+        description: "Autosomal dominant",
       },
       {
         id: "AD_IP",
