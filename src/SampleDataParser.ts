@@ -1,6 +1,6 @@
-import { FieldMetadata } from "./MetadataParser";
 import { parseValue } from "./DataParser";
 import { parseIntegerValue, Value, ValueArray, ValueInteger } from "./ValueParser";
+import { FieldMetadata } from "./types/Metadata";
 
 export interface RecordSample {
   [index: string]: RecordSampleType;

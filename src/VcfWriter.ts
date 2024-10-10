@@ -1,9 +1,9 @@
 import { Container, FormatMetadataContainer, Genotype, Metadata, Record, RecordSample } from "./Vcf";
 import { MISSING } from "./Constants";
 import { FieldMetadataContainer, InfoContainer } from "./VcfParser";
-import { FieldMetadata, NestedFieldMetadata } from "./MetadataParser";
 import { Value, ValueArray } from "./ValueParser";
 import { RecordSampleType } from "./SampleDataParser";
+import { FieldMetadata, NestedFieldMetadata } from "./types/Metadata";
 
 export type Filter = {
   samples?: string[];

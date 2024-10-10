@@ -2,19 +2,51 @@
   "format": {
     "VI": {
       "label": "Inheritance",
-      "description": "An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD, YL, MT",
+      "description": "An enumeration of possible inheritance modes based on the pedigree of the sample",
       "numberType": "OTHER",
       "separator": ",",
       "type": "CATEGORICAL",
       "categories": [
-        "AD",
-        "AD_IP",
-        "AR",
-        "AR_C",
-        "XLD",
-        "XLR",
-        "YL",
-        "MT"
+        {
+          "id": "AD",
+          "label": "AD",
+          "description": "Autosomal dominant"
+        },
+        {
+          "id": "AD_IP",
+          "label": "AD incomplete penetrance",
+          "description": "Autosomal dominant incomplete penetrance"
+        },
+        {
+          "id": "AR",
+          "label": "AR",
+          "description": "Autosomal recessive"
+        },
+        {
+          "id": "AR_C",
+          "label": "AR compound hetrozygote",
+          "description": "Autosomal recessive compound hetrozygote"
+        },
+        {
+          "id": "XLD",
+          "label": "XLD",
+          "description": "X-linked dominant"
+        },
+        {
+          "id": "XLR",
+          "label": "XLR",
+          "description": "X-linked recessive"
+        },
+        {
+          "id": "YL",
+          "label": "YL",
+          "description": "Y-linked"
+        },
+        {
+          "id": "MT",
+          "label": "MT",
+          "description": "Mitochondrial"
+        }
       ]
     }
   },
@@ -42,11 +74,27 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "B",
-            "LB",
-            "VUS",
-            "LP",
-            "P"
+            {
+              "id": "B",
+              "label": "Benign"
+            },
+            {
+              "id": "LB",
+              "label": "Likely benign"
+            },
+            {
+              "id": "VUS",
+              "label": "Uncertain significance",
+              "description": "Variant of uncertain significance"
+            },
+            {
+              "id": "LP",
+              "label": "Likely pathogenic"
+            },
+            {
+              "id": "P",
+              "label": "Pathogenic"
+            }
           ]
         },
         "CAPICE_SC": {
@@ -96,12 +144,32 @@
           "separator": "/",
           "type": "CATEGORICAL",
           "categories": [
-            "Benign",
-            "Likely_benign",
-            "Uncertain_significance",
-            "Likely_pathogenic",
-            "Pathogenic",
-            "Conflicting_interpretations_of_pathogenicity"
+            {
+              "id": "Benign",
+              "label": "Benign"
+            },
+            {
+              "id": "Likely_benign",
+              "label": "Likely benign"
+            },
+            {
+              "id": "Uncertain_significance",
+              "label": "Uncertain significance",
+              "description": "Variant of uncertain significance"
+            },
+            {
+              "id": "Likely_pathogenic",
+              "label": "Likely pathogenic"
+            },
+            {
+              "id": "Pathogenic",
+              "label": "Pathogenic"
+            },
+            {
+              "id": "Conflicting_interpretations_of_pathogenicity",
+              "label": "Conflicting",
+              "description": "Conflicting interpretations of pathogenicity"
+            }
           ]
         },
         "clinVar_CLNSIGINCL": {
@@ -111,12 +179,32 @@
           "separator": "&",
           "type": "CATEGORICAL",
           "categories": [
-            "Benign",
-            "Likely_benign",
-            "Uncertain_significance",
-            "Likely_pathogenic",
-            "Pathogenic",
-            "Conflicting_interpretations_of_pathogenicity"
+            {
+              "id": "Benign",
+              "label": "Benign"
+            },
+            {
+              "id": "Likely_benign",
+              "label": "Likely benign"
+            },
+            {
+              "id": "Uncertain_significance",
+              "label": "Uncertain significance",
+              "description": "Variant of uncertain significance"
+            },
+            {
+              "id": "Likely_pathogenic",
+              "label": "Likely pathogenic"
+            },
+            {
+              "id": "Pathogenic",
+              "label": "Pathogenic"
+            },
+            {
+              "id": "Conflicting_interpretations_of_pathogenicity",
+              "label": "Conflicting interpretations",
+              "description": "Conflicting interpretations of pathogenicity"
+            }
           ]
         },
         "clinVar_CLNREVSTAT": {
@@ -126,15 +214,50 @@
           "separator": "&",
           "type": "CATEGORICAL",
           "categories": [
-            "practice_guideline",
-            "reviewed_by_expert_panel",
-            "criteria_provided",
-            "_multiple_submitters",
-            "_no_conflicts",
-            "_single_submitter",
-            "_conflicting_interpretations",
-            "no_assertion_criteria_provided",
-            "no_assertion_provided"
+            {
+              "id": "practice_guideline",
+              "label": "Practice guideline",
+              "description": "There is a submitted record with a classification from a practice guideline"
+            },
+            {
+              "id": "reviewed_by_expert_panel",
+              "label": "Reviewed by expert panel",
+              "description": "There is a submitted record with a classification from an expert panel"
+            },
+            {
+              "id": "criteria_provided",
+              "label": "Criteria provided",
+              "description": "Assertion criteria and evidence for the classification (or a public contact) were provided"
+            },
+            {
+              "id": "_multiple_submitters",
+              "label": "Multiple submitters",
+              "description": "There are multiple submitted records with a classification"
+            },
+            {
+              "id": "_no_conflicts",
+              "label": "No conflicts",
+              "description": "The classifications agree"
+            },
+            {
+              "id": "_single_submitter",
+              "label": "Single submitter",
+              "description": "There is a single submitted record with a classification"
+            },
+            {
+              "id": "_conflicting_interpretations",
+              "label": "Conflicting_interpretations",
+              "description": "There are conflicting classifications"
+            },
+            {
+              "id": "no_assertion_criteria_provided",
+              "label": "No assertion criteria provided",
+              "description": "There are one or more submitted records with a classification but without assertion criteria and evidence for the classification (or a public contact)"
+            },
+            {
+              "id": "no_assertion_provided",
+              "label": "No assertion provided"
+            }
           ]
         },
         "Consequence": {
@@ -158,9 +281,15 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "Transcript",
-            "RegulatoryFeature",
-            "MotifFeature"
+            {
+              "id": "Transcript"
+            },
+            {
+              "id": "RegulatoryFeature"
+            },
+            {
+              "id": "MotifFeature"
+            }
           ],
           "required": true
         },
@@ -178,8 +307,12 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "LC",
-            "HC"
+            {
+              "id": "LC"
+            },
+            {
+              "id": "HC"
+            }
           ]
         },
         "GADO_SC": {
@@ -231,9 +364,15 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "E",
-            "G",
-            "T"
+            {
+              "id": "E"
+            },
+            {
+              "id": "G"
+            },
+            {
+              "id": "T"
+            }
           ]
         },
         "gnomAD_QC": {
@@ -278,10 +417,18 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "LOW",
-            "MODERATE",
-            "HIGH",
-            "MODIFIER"
+            {
+              "id": "LOW"
+            },
+            {
+              "id": "MODERATE"
+            },
+            {
+              "id": "HIGH"
+            },
+            {
+              "id": "MODIFIER"
+            }
           ],
           "required": true
         },
@@ -427,11 +574,21 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "B",
-            "LB",
-            "VUS",
-            "LP",
-            "P"
+            {
+              "id": "B"
+            },
+            {
+              "id": "LB"
+            },
+            {
+              "id": "VUS"
+            },
+            {
+              "id": "LP"
+            },
+            {
+              "id": "P"
+            }
           ]
         },
         "VKGL_UMCG": {
@@ -441,11 +598,21 @@
           "numberCount": 1,
           "type": "CATEGORICAL",
           "categories": [
-            "B",
-            "LB",
-            "VUS",
-            "LP",
-            "P"
+            {
+              "id": "B"
+            },
+            {
+              "id": "LB"
+            },
+            {
+              "id": "VUS"
+            },
+            {
+              "id": "LP"
+            },
+            {
+              "id": "P"
+            }
           ]
         }
       }

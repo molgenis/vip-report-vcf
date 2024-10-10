@@ -1,5 +1,6 @@
 import { MISSING } from "./Constants";
-import { ValueType } from "./MetadataParser";
+
+import { ValueType } from "./types/Metadata";
 
 export type Value = ValueCharacter | ValueFlag | ValueFloat | ValueInteger | ValueObject | ValueString | ValueArray;
 export type ValueArray = Array<Value | Array<Value>>;
@@ -31,7 +32,7 @@ export function parseTypedValue(token: string, type: ValueType): Value {
       value = parseFloatValue(token);
       break;
     default:
-      throw new Error("invalid value type");
+      throw new Error(`invalid value type '${type}'`);
   }
 
   return value;
