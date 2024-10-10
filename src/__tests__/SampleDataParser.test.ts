@@ -5,8 +5,8 @@ import {
   parseGenotype,
   parseRecordSample,
 } from "../SampleDataParser";
-import { FieldMetadata } from "../MetadataParser";
 import { expect, test } from "vitest";
+import { FieldMetadata } from "../types/Metadata";
 
 test("determine genotype type - miss single", () => {
   expect(determineGenotypeType([null])).toBe("miss");

@@ -1,8 +1,8 @@
 import { createVepInfoMetadata, isVepInfoMetadata } from "../VepMetadataParser";
-import { InfoMetadata } from "../MetadataParser";
 import { expect, test } from "vitest";
 import metadataJson from "./field_metadata.json";
-import { Metadata } from "../FieldMetadata";
+import { SupplementaryFieldMetadataNested, SupplementaryMetadata } from "../types/SupplementaryMetadata";
+import { InfoMetadata } from "../types/Metadata";
 
 const vepInfoMetadata: InfoMetadata = {
   id: "CSQ",
@@ -42,8 +42,8 @@ test("is vep info metadata - false", () => {
 });
 
 test("create vep metadata", () => {
-  const meta = metadataJson as unknown as Metadata;
-  expect(createVepInfoMetadata(vepInfoMetadata, meta.info)).toStrictEqual({
+  const meta = metadataJson as unknown as SupplementaryMetadata;
+  expect(createVepInfoMetadata(vepInfoMetadata, meta.info["CSQ"] as SupplementaryFieldMetadataNested)).toStrictEqual({
     separator: "|",
     items: [
       {
