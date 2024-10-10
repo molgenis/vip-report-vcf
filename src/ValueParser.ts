@@ -32,7 +32,7 @@ export function parseTypedValue(token: string, type: ValueType): Value {
       value = parseFloatValue(token);
       break;
     default:
-      throw new Error("invalid value type");
+      throw new Error(`invalid value type '${type}'`);
   }
 
   return value;
