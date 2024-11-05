@@ -1,8 +1,8 @@
 import { createVepInfoMetadata, isVepInfoMetadata } from "../VepMetadataParser";
-import { InfoMetadata } from "../MetadataParser";
 import { expect, test } from "vitest";
 import metadataJson from "./field_metadata.json";
-import { Metadata } from "../FieldMetadata";
+
+import { InfoMetadata, SupplementaryFieldMetadataNested, SupplementaryMetadata } from "../types/Vcf";
 
 const vepInfoMetadata: InfoMetadata = {
   id: "CSQ",
@@ -42,8 +42,8 @@ test("is vep info metadata - false", () => {
 });
 
 test("create vep metadata", () => {
-  const meta = metadataJson as Metadata;
-  expect(createVepInfoMetadata(vepInfoMetadata, meta.info)).toStrictEqual({
+  const meta = metadataJson as unknown as SupplementaryMetadata;
+  expect(createVepInfoMetadata(vepInfoMetadata, meta.info["CSQ"] as SupplementaryFieldMetadataNested)).toStrictEqual({
     separator: "|",
     items: [
       {
@@ -147,12 +147,32 @@ test("create vep metadata", () => {
           required: true,
         },
         categories: [
-          "Benign",
-          "Likely_benign",
-          "Uncertain_significance",
-          "Likely_pathogenic",
-          "Pathogenic",
-          "Conflicting_interpretations_of_pathogenicity",
+          {
+            id: "Benign",
+            label: "Benign",
+          },
+          {
+            id: "Likely_benign",
+            label: "Likely benign",
+          },
+          {
+            id: "Uncertain_significance",
+            label: "Uncertain significance",
+            description: "Variant of uncertain significance",
+          },
+          {
+            id: "Likely_pathogenic",
+            label: "Likely pathogenic",
+          },
+          {
+            id: "Pathogenic",
+            label: "Pathogenic",
+          },
+          {
+            id: "Conflicting_interpretations_of_pathogenicity",
+            label: "Conflicting",
+            description: "Conflicting interpretations of pathogenicity",
+          },
         ],
         label: "ClinVar variant",
         description: "Clinical significance for this single variant",
@@ -170,12 +190,32 @@ test("create vep metadata", () => {
           required: true,
         },
         categories: [
-          "Benign",
-          "Likely_benign",
-          "Uncertain_significance",
-          "Likely_pathogenic",
-          "Pathogenic",
-          "Conflicting_interpretations_of_pathogenicity",
+          {
+            id: "Benign",
+            label: "Benign",
+          },
+          {
+            id: "Likely_benign",
+            label: "Likely benign",
+          },
+          {
+            id: "Uncertain_significance",
+            label: "Uncertain significance",
+            description: "Variant of uncertain significance",
+          },
+          {
+            id: "Likely_pathogenic",
+            label: "Likely pathogenic",
+          },
+          {
+            id: "Pathogenic",
+            label: "Pathogenic",
+          },
+          {
+            id: "Conflicting_interpretations_of_pathogenicity",
+            label: "Conflicting interpretations",
+            description: "Conflicting interpretations of pathogenicity",
+          },
         ],
         label: "ClinVar variant combination",
         description: "Clinical significance for a haplotype or genotype that includes this variant",
@@ -193,15 +233,51 @@ test("create vep metadata", () => {
           required: true,
         },
         categories: [
-          "practice_guideline",
-          "reviewed_by_expert_panel",
-          "criteria_provided",
-          "_multiple_submitters",
-          "_no_conflicts",
-          "_single_submitter",
-          "_conflicting_interpretations",
-          "no_assertion_criteria_provided",
-          "no_assertion_provided",
+          {
+            id: "practice_guideline",
+            label: "Practice guideline",
+            description: "There is a submitted record with a classification from a practice guideline",
+          },
+          {
+            id: "reviewed_by_expert_panel",
+            label: "Reviewed by expert panel",
+            description: "There is a submitted record with a classification from an expert panel",
+          },
+          {
+            id: "criteria_provided",
+            label: "Criteria provided",
+            description: "Assertion criteria and evidence for the classification (or a public contact) were provided",
+          },
+          {
+            id: "_multiple_submitters",
+            label: "Multiple submitters",
+            description: "There are multiple submitted records with a classification",
+          },
+          {
+            id: "_no_conflicts",
+            label: "No conflicts",
+            description: "The classifications agree",
+          },
+          {
+            id: "_single_submitter",
+            label: "Single submitter",
+            description: "There is a single submitted record with a classification",
+          },
+          {
+            id: "_conflicting_interpretations",
+            label: "Conflicting_interpretations",
+            description: "There are conflicting classifications",
+          },
+          {
+            id: "no_assertion_criteria_provided",
+            label: "No assertion criteria provided",
+            description:
+              "There are one or more submitted records with a classification but without assertion criteria and evidence for the classification (or a public contact)",
+          },
+          {
+            id: "no_assertion_provided",
+            label: "No assertion provided",
+          },
         ],
         label: "ClinVar status",
         description: "ClinVar review status",

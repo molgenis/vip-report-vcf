@@ -1,14 +1,19 @@
 import { parseIntegerValueNonNull, parseStringValueNonNull } from "./ValueParser";
 import { createVepInfoMetadata, isVepInfoMetadata } from "./VepMetadataParser";
-import { Field, NestedFields, NestedMetadatas } from "./FieldMetadata";
-
-export type NumberType = "NUMBER" | "PER_ALT" | "PER_ALT_AND_REF" | "PER_GENOTYPE" | "OTHER";
-
-export interface NumberMetadata {
-  type: NumberType;
-  count?: number;
-  separator?: string;
-}
+import {
+  CategoryRecord,
+  FieldMetadata,
+  InfoMetadata,
+  NestedFieldMetadata,
+  NumberMetadata,
+  NumberType,
+  SupplementaryFieldMetadata,
+  SupplementaryFieldMetadataItem,
+  SupplementaryFieldMetadataNested,
+  SupplementaryFieldMetadataRecord,
+  ValueDescription,
+  ValueType,
+} from "./types/Vcf";
 
 export function parseNumberMetadata(token: string): NumberMetadata {
   let type: NumberType;
@@ -51,8 +56,6 @@ export function parseNumberMetadata(token: string): NumberMetadata {
   return numberMetaData;
 }
 
-export type ValueType = "CATEGORICAL" | "CHARACTER" | "INTEGER" | "FLAG" | "FLOAT" | "STRING";
-
 export function parseValueType(token: string): ValueType {
   let type: ValueType;
 
@@ -79,72 +82,88 @@ export function parseValueType(token: string): ValueType {
   return type;
 }
 
-export interface FieldMetadata {
-  id: string;
-  number: NumberMetadata;
-  type: ValueType;
-  label?: string;
-  description?: string;
-  categories?: string[];
-  required?: boolean;
-  nested?: NestedFieldMetadata;
-  parent?: FieldMetadata;
+function isNestedFieldMetadata(identifier: string, meta: SupplementaryFieldMetadataRecord) {
+  const supplementaryFieldMetadata = meta[identifier];
+
+  let isNestedFieldMetadata: boolean;
+  if (supplementaryFieldMetadata === undefined) {
+    isNestedFieldMetadata = false;
+  } else {
+    // to avoid a metadata model change, use this workaround to distinguish between nested and non-nested items
+    isNestedFieldMetadata = Object.hasOwn(supplementaryFieldMetadata, "nestedFields");
+  }
+  return isNestedFieldMetadata;
 }
 
-export interface NestedFieldMetadata {
-  separator: string;
-  items: FieldMetadata[];
+function parseFieldMetadata(
+  identifier: string,
+  number: string,
+  type: string,
+  description: string,
+  meta?: SupplementaryFieldMetadataRecord,
+): FieldMetadata {
+  const parsedIdentifier = parseStringValueNonNull(identifier);
+  let parsedNumber: NumberMetadata;
+  let parsedType: ValueType;
+  let categories: CategoryRecord | undefined;
+  let nullValue: ValueDescription | undefined;
+  let required;
+  let label, parsedDescription: string | undefined;
+
+  if (meta !== undefined && meta[parsedIdentifier] !== undefined && !isNestedFieldMetadata(parsedIdentifier, meta)) {
+    const fieldMetadata: SupplementaryFieldMetadata = meta[parsedIdentifier] as SupplementaryFieldMetadataItem;
+    parsedNumber = {
+      type: fieldMetadata.numberType,
+      count: fieldMetadata.numberCount,
+      separator: fieldMetadata.separator,
+    };
+    parsedType = fieldMetadata.type;
+    required = fieldMetadata.required !== undefined ? fieldMetadata.required : false;
+    label = fieldMetadata.label;
+    parsedDescription = fieldMetadata.description;
+    categories = fieldMetadata.categories;
+    nullValue = fieldMetadata.nullValue;
+  } else {
+    parsedNumber = parseNumberMetadata(number);
+    parsedType = parseValueType(type);
+    parsedDescription = parseStringValueNonNull(description);
+  }
+  const metadata: FieldMetadata = {
+    id: parsedIdentifier,
+    number: parsedNumber,
+    type: parsedType,
+  };
+  if (categories) metadata.categories = categories;
+  if (nullValue) metadata.nullValue = nullValue;
+  if (required) metadata.required = required;
+  if (label) metadata.label = label;
+  if (parsedDescription) metadata.description = parsedDescription;
+
+  const supplementaryFieldMetadataNested = meta !== undefined ? meta[parsedIdentifier] : undefined;
+  const nested = parseFieldMetadataNested(metadata, supplementaryFieldMetadataNested);
+  if (nested != null) {
+    metadata.nested = nested;
+  }
+
+  return metadata;
 }
 
-export interface InfoMetadata extends FieldMetadata {
-  source?: string;
-  version?: string;
-}
+//FIXME order might differ
 const REG_EXP_FORMAT = /##FORMAT=<ID=(.+?),Number=(.+?),Type=(.+?),Description="(.+?)">/;
 
 /**
  * @param token VCF format header line
  * @param meta VCF format metadata not stored in the VCF e.g. to describe categorical data
  */
-export function parseFormatMetadata(token: string, meta?: NestedFields): FieldMetadata {
+export function parseFormatMetadata(token: string, meta?: SupplementaryFieldMetadataRecord): FieldMetadata {
   const result = token.match(REG_EXP_FORMAT);
   if (result === null) {
     throw new Error(`invalid format metadata '${token}'`);
   }
-  const identifier = parseStringValueNonNull(result[1]);
-
-  let number: NumberMetadata;
-  let type: ValueType;
-  let categories: string[] | undefined;
-  let required;
-  let label, description: string | undefined;
-
-  if (meta !== undefined && meta[identifier] !== undefined) {
-    const fieldMetadata: Field = meta[identifier];
-    number = { type: fieldMetadata.numberType, count: fieldMetadata.numberCount, separator: fieldMetadata.separator };
-    type = fieldMetadata.type;
-    required = fieldMetadata.required !== undefined ? fieldMetadata.required : false;
-    label = fieldMetadata.label;
-    description = fieldMetadata.description;
-    categories = fieldMetadata.categories;
-  } else {
-    number = parseNumberMetadata(result[2]);
-    type = parseValueType(result[3]);
-    description = parseStringValueNonNull(result[4]);
-  }
-  const metadata: FieldMetadata = {
-    id: identifier,
-    number: number,
-    type: type,
-  };
-  if (categories) metadata.categories = categories;
-  if (required) metadata.required = required;
-  if (label) metadata.label = label;
-  if (description) metadata.description = description;
-
-  return metadata;
+  return parseFieldMetadata(result[1]!, result[2]!, result[3]!, result[4]!, meta);
 }
 
+//FIXME order might differ
 const REG_EXP_INFO =
   /##INFO=<ID=(.+?),Number=(.+?),Type=(.+?),Description="(.+?)"(?:,Source="(.+?)")?(?:,Version="(.+?)")?>/;
 
@@ -152,18 +171,13 @@ const REG_EXP_INFO =
  * @param token VCF info header line
  * @param meta VCF info metadata not stored in the VCF e.g. to describe nested data from VEP
  */
-export function parseInfoMetadata(token: string, meta?: NestedMetadatas): InfoMetadata {
+export function parseInfoMetadata(token: string, meta?: SupplementaryFieldMetadataRecord): InfoMetadata {
   const result = token.match(REG_EXP_INFO);
   if (result === null) {
     throw new Error(`invalid info metadata '${token}'`);
   }
 
-  const infoMetadata: InfoMetadata = {
-    id: result[1],
-    number: parseNumberMetadata(result[2]),
-    type: parseValueType(result[3]),
-    description: result[4],
-  };
+  const infoMetadata = parseFieldMetadata(result[1]!, result[2]!, result[3]!, result[4]!, meta) as InfoMetadata;
 
   const source = result[5];
   if (source !== undefined) {
@@ -174,17 +188,16 @@ export function parseInfoMetadata(token: string, meta?: NestedMetadatas): InfoMe
     infoMetadata.version = version;
   }
 
-  const nested = createNestedInfoMetadata(infoMetadata, meta);
-  if (nested != null) {
-    infoMetadata.nested = nested;
-  }
   return infoMetadata;
 }
 
-function createNestedInfoMetadata(infoMetadata: InfoMetadata, meta?: NestedMetadatas): NestedFieldMetadata | null {
+function parseFieldMetadataNested(
+  fieldMetadata: FieldMetadata,
+  meta?: SupplementaryFieldMetadata,
+): NestedFieldMetadata | null {
   let nestedInfoMetadata: NestedFieldMetadata | null;
-  if (isVepInfoMetadata(infoMetadata)) {
-    nestedInfoMetadata = createVepInfoMetadata(infoMetadata, meta);
+  if (isVepInfoMetadata(fieldMetadata)) {
+    nestedInfoMetadata = createVepInfoMetadata(fieldMetadata, meta as SupplementaryFieldMetadataNested | undefined);
   } else {
     nestedInfoMetadata = null;
   }
