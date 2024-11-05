@@ -20,7 +20,7 @@ export interface VcfMetadata {
   supplement?: SupplementaryMetadata;
 }
 
-export interface VcfRecord {
+export type VcfRecord = {
   c: string;
   p: number;
   i: string[];
@@ -30,7 +30,7 @@ export interface VcfRecord {
   f: string[];
   n: InfoContainer;
   s: RecordSample[];
-}
+};
 
 export interface InfoContainer {
   [index: string]: Value | ValueArray;
