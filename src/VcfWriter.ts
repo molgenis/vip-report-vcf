@@ -13,7 +13,7 @@ import {
   VcfContainer,
   VcfMetadata,
   VcfRecord,
-} from "./types/Vcf";
+} from "./index";
 import { MISSING } from "./Constants";
 
 export function writeVcf(container: VcfContainer, filter: Filter = {}): string {

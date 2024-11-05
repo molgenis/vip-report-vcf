@@ -1,3 +1,12 @@
+import { parseVcf as parseVcfAlias } from "./VcfParser";
+import { writeVcf as writeVcfAlias } from "./VcfWriter";
+
+// exported variables
+export const parseVcf = parseVcfAlias;
+
+export const writeVcf = writeVcfAlias;
+
+// exported types and interfaces
 export interface VcfContainer {
   metadata: VcfMetadata;
   data: VcfRecord[];

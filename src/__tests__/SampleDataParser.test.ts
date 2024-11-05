@@ -7,7 +7,7 @@ import {
 } from "../SampleDataParser";
 import { expect, test } from "vitest";
 
-import { FieldMetadata } from "../types/Vcf";
+import { FieldMetadata } from "../index";
 
 test("determine genotype type - miss single", () => {
   expect(determineGenotypeType([null])).toBe("miss");

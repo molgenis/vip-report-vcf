@@ -2,7 +2,7 @@ import { parseFormatMetadata, parseInfoMetadata, parseNumberMetadata, parseValue
 import { expect, test } from "vitest";
 import metadataJson from "./field_metadata.json";
 
-import { FieldMetadata, SupplementaryMetadata } from "../types/Vcf";
+import { FieldMetadata, SupplementaryMetadata } from "../index";
 
 test("parse number metadata - A", () => {
   expect(parseNumberMetadata("A")).toStrictEqual({ type: "PER_ALT", separator: "," });

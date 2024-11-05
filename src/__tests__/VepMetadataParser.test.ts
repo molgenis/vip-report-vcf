@@ -2,7 +2,7 @@ import { createVepInfoMetadata, isVepInfoMetadata } from "../VepMetadataParser";
 import { expect, test } from "vitest";
 import metadataJson from "./field_metadata.json";
 
-import { InfoMetadata, SupplementaryFieldMetadataNested, SupplementaryMetadata } from "../types/Vcf";
+import { InfoMetadata, SupplementaryFieldMetadataNested, SupplementaryMetadata } from "../index";
 
 const vepInfoMetadata: InfoMetadata = {
   id: "CSQ",

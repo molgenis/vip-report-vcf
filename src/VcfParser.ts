@@ -19,7 +19,7 @@ import {
   VcfContainer,
   VcfMetadata,
   VcfRecord,
-} from "./types/Vcf";
+} from "./index";
 
 const viabFormatMeta: FieldMetadata = {
   id: "VIAB",

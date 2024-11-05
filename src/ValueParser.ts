@@ -1,6 +1,6 @@
 import { MISSING } from "./Constants";
 
-import { Value, ValueType } from "./types/Vcf";
+import { Value, ValueType } from "./index";
 
 export function parseTypedValue(token: string, type: ValueType): Value {
   let value: Value;

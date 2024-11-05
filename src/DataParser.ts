@@ -1,5 +1,5 @@
 import { parseTypedValue } from "./ValueParser";
-import { InfoMetadata, NestedFieldMetadata, Value, ValueArray } from "./types/Vcf";
+import { InfoMetadata, NestedFieldMetadata, Value, ValueArray } from "./index";
 
 export function parseValue(token: string, infoMetadata: InfoMetadata): Value | ValueArray {
   let value: Value | ValueArray;

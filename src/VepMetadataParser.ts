@@ -9,7 +9,7 @@ import {
   SupplementaryFieldMetadataNested,
   ValueDescription,
   ValueType,
-} from "./types/Vcf";
+} from "./index";
 
 const REG_EXP_VEP = /Consequence annotations from Ensembl VEP. Format: (.+)/;
 

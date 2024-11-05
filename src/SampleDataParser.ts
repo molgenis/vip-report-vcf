@@ -11,7 +11,7 @@ import {
   Value,
   ValueArray,
   ValueInteger,
-} from "./types/Vcf";
+} from "./index";
 
 export function parseRecordSample(
   token: string,

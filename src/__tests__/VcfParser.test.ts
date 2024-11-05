@@ -1,5 +1,5 @@
 import { parseVcf } from "../VcfParser";
-import { ValueArray, VcfContainer } from "../types/Vcf";
+import { ValueArray, VcfContainer } from "../index";
 import { expect, test } from "vitest";
 
 // trailing info semicolon placed on purpose

@@ -13,7 +13,7 @@ import {
   SupplementaryFieldMetadataRecord,
   ValueDescription,
   ValueType,
-} from "./types/Vcf";
+} from "./index";
 
 export function parseNumberMetadata(token: string): NumberMetadata {
   let type: NumberType;

@@ -1,16 +1,19 @@
 {
   "name": "@molgenis/vip-report-vcf",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
-    "prepack": "copyfiles --up 1 src/types/*.d.ts dist && tsc --build",
+    "build": "tsc --build",
     "format": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepack": "copyfiles README.md LICENSE package.json dist && copyfiles --up 1 src/types/*.d.ts dist"
   },
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "LICENSE",
