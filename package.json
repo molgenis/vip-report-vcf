@@ -1,6 +1,6 @@
 {
   "name": "@molgenis/vip-report-vcf",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "TypeScript VCF library with support for both reading and writing",
   "scripts": {
     "build": "tsc --build",
@@ -47,5 +47,9 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.13.0",
     "vitest": "^2.1.4"
+  },
+  "engines": {
+    "node": "22",
+    "pnpm": "9"
   }
 }
