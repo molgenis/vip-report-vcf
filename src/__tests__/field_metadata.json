@@ -51,6 +51,25 @@
     }
   },
   "info": {
+    "TEST": {
+      "label": "Test info",
+      "description": "Test info field.",
+      "numberType": "NUMBER",
+      "numberCount": 1,
+      "type": "CATEGORICAL",
+      "categories": [
+        {
+          "id": "1",
+          "label": "cat1",
+          "description": "desc1"
+        },
+        {
+          "id": "2",
+          "label": "cat2",
+          "description": "desc2"
+        }
+      ]
+    },
     "CSQ": {
       "nestedFields": {
         "ALLELE_NUM": {
