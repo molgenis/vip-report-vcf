@@ -105,6 +105,30 @@ test("parse format metadata from json", () => {
   });
 });
 
+test("parse unnested metadata from json", () => {
+  const meta = metadataJson as unknown as SupplementaryMetadata;
+  const token = '##INFO=<ID=TEST,Number=.,Type=String,Description="field desc from file">';
+  expect(parseInfoMetadata(token, meta.info)).toStrictEqual({
+    id: "TEST",
+    number: { type: "NUMBER", count: 1, separator: undefined },
+    type: "CATEGORICAL",
+    categories: [
+      {
+        id: "1",
+        label: "cat1",
+        description: "desc1",
+      },
+      {
+        id: "2",
+        label: "cat2",
+        description: "desc2",
+      },
+    ],
+    label: "Test info",
+    description: "Test info field.",
+  });
+});
+
 test("parse format metadata - invalid", () => {
   expect(() => parseFormatMetadata("xx")).toThrow("invalid format metadata 'xx'");
 });
@@ -129,7 +153,6 @@ test("parse info metadata - flag", () => {
   });
 });
 
-// TODO add test case for non-nested metadata
 test("parse info metadata - with source and version", () => {
   const token = '##INFO=<ID=KEY,Number=1,Type=Float,Description="Single Float",Source="Source",Version="12">';
   expect(parseInfoMetadata(token)).toStrictEqual({
