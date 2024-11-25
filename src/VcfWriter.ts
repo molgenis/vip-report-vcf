@@ -236,9 +236,10 @@ function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): 
     if (formatField.number.count === 0) {
       vcf = formatField.id;
     } else if (formatField.number.count === 1) {
-      vcf = writeFieldValueSingle(formatField, value as Value);
+      vcf = value !== null ? writeFieldValueSingle(formatField, value as Value) : MISSING;
     } else {
-      vcf = writeFieldValueMultiple(formatField, value as ValueArray, ",");
+      const valueArray = value as ValueArray;
+      vcf = valueArray.length > 0 ? writeFieldValueMultiple(formatField, valueArray, ",") : MISSING;
     }
   }
   return vcf;
