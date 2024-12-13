@@ -10,7 +10,6 @@ import { parseFormatMetadata, parseInfoMetadata } from "./MetadataParser";
 import { parseValue } from "./DataParser";
 import { parseRecordSample } from "./SampleDataParser";
 import {
-  FieldMetadata,
   FieldMetadataContainer,
   FormatMetadataContainer,
   InfoContainer,
@@ -20,13 +19,6 @@ import {
   VcfMetadata,
   VcfRecord,
 } from "./index";
-
-const viabFormatMeta: FieldMetadata = {
-  id: "VIAB",
-  number: { type: "NUMBER", count: 1 },
-  type: "FLOAT",
-  description: "VIP calculated allele balance",
-};
 
 /**
  * @param vcf VCF file contents
@@ -74,9 +66,6 @@ function parseMetadataLine(line: string, metadata: VcfMetadata) {
   } else if (line.startsWith("##FORMAT")) {
     const formatMetadata = parseFormatMetadata(line, metadata.supplement?.format);
     metadata.format[formatMetadata.id] = formatMetadata;
-    if (formatMetadata.id === "AD") {
-      metadata.format["VIAB"] = viabFormatMeta;
-    }
   }
 }
 
