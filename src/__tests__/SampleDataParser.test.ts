@@ -1,11 +1,5 @@
-import {
-  calculateAlleleBalance,
-  determineGenotypeType,
-  parseFormatValue,
-  parseGenotype,
-  parseRecordSample,
-} from "../SampleDataParser";
-import { expect, test } from "vitest";
+import { determineGenotypeType, parseFormatValue, parseGenotype, parseRecordSample } from "../SampleDataParser";
+import { describe, expect, test } from "vitest";
 
 import { FieldMetadata } from "../index";
 
