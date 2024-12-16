@@ -10,7 +10,6 @@ import {
   RecordSampleType,
   Value,
   ValueArray,
-  ValueInteger,
 } from "./index";
 
 export function parseRecordSample(
@@ -28,9 +27,6 @@ export function parseRecordSample(
     if (fieldMetadata === undefined) throw new Error(`unknown format field '${field}'`);
 
     recordSample[field] = parseFormatValue(parts[i]!, fieldMetadata);
-    if (fieldMetadata.id === "AD") {
-      recordSample["VIAB"] = calculateAlleleBalance(recordSample[field] as number[]);
-    }
   }
   return recordSample;
 }
@@ -50,20 +46,6 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
     }
   }
   return value;
-}
-
-/**
- * Calculate allele balance: allele depth of first allele divided by total allele depth
- *
- * @param allelicDepths allele depth values with each value an integer or null
- * @return allele balance or null if 1) allele depth array contains a null value 2) total allele depth is zero
- */
-export function calculateAlleleBalance(allelicDepths: ValueInteger[]): ValueInteger {
-  if (allelicDepths.includes(null) || allelicDepths.length === 0) {
-    return null;
-  }
-  const total = (allelicDepths as number[]).reduce((x, y) => x + y);
-  return total != 0 ? (allelicDepths as number[])[0]! / total : null;
 }
 
 export function parseGenotype(token: string): Genotype {

@@ -214,16 +214,14 @@ function writeString(value: string) {
 }
 
 function writeFormat(samples: RecordSample[]): string {
-  const keys = Object.keys(samples[0]!).filter((key) => key !== "VIAB");
+  const keys = Object.keys(samples[0]!);
   return keys.length > 0 ? keys.map(writeString).join(":") : MISSING;
 }
 
 function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample): string {
   const vcf = [];
   for (const [key, value] of Object.entries(sample)) {
-    if (key !== "VIAB") {
-      vcf.push(writeSampleValue(formatFields[key]!, value));
-    }
+    vcf.push(writeSampleValue(formatFields[key]!, value));
   }
   return vcf.join(":");
 }
