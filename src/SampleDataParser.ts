@@ -37,6 +37,13 @@ export function parseFormatValue(token: string, formatMetadata: FieldMetadata): 
     value = parseGenotype(token);
   } else {
     value = parseValue(token, formatMetadata);
+
+    // from VCF v4.5 specs in 1.6.2 Genotype fields:
+    // "If a field contains a list of missing values, it can be represented either as a single MISSING value (‘.’) or as a list of missing values (e.g. ‘.,.,.’ if the field was Number=3"
+    // treat both cases similarly
+    if (Array.isArray(value) && value.every((item) => item === null)) {
+      value = [];
+    }
   }
   return value;
 }

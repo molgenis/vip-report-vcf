@@ -1,4 +1,10 @@
-import { determineGenotypeType, parseFormatValue, parseGenotype, parseRecordSample } from "../SampleDataParser";
+import {
+  calculateAlleleBalance,
+  determineGenotypeType,
+  parseFormatValue,
+  parseGenotype,
+  parseRecordSample,
+} from "../SampleDataParser";
 import { expect, test } from "vitest";
 
 import { FieldMetadata } from "../index";
@@ -91,4 +97,51 @@ test("parse record sample - drop trailing fields", () => {
       DP: dpFormatMetadata,
     }),
   ).toStrictEqual({ GT: { a: [0, 1], p: true, t: "het" } });
+});
+
+describe("parse record sample with missing value", () => {
+  test("parse record sample - empty single value", () => {
+    const svFormatMetadata: FieldMetadata = {
+      id: "SV",
+      number: { type: "NUMBER", count: 1 },
+      type: "STRING",
+    };
+    expect(
+      parseRecordSample("./.:.:1", ["GT", "SV", "DP"], {
+        GT: gtFormatMetadata,
+        SV: svFormatMetadata,
+        DP: dpFormatMetadata,
+      }),
+    ).toStrictEqual({ GT: { a: [null, null], p: false, t: "miss" }, SV: null, DP: 1 });
+  });
+
+  test("parse record sample - empty multiple value, represented either as a single MISSING value (‘.’)", () => {
+    const mvFormatMetadata: FieldMetadata = {
+      id: "MV",
+      number: { type: "OTHER" },
+      type: "STRING",
+    };
+    expect(
+      parseRecordSample("./.:.:1", ["GT", "MV", "DP"], {
+        GT: gtFormatMetadata,
+        MV: mvFormatMetadata,
+        DP: dpFormatMetadata,
+      }),
+    ).toStrictEqual({ GT: { a: [null, null], p: false, t: "miss" }, MV: [], DP: 1 });
+  });
+
+  test("parse record sample - empty multiple value, represented either as a single MISSING value (‘.’) or as a list of missing values (e.g. ‘.,.,.’ if the field was Number=3", () => {
+    const mvFormatMetadata: FieldMetadata = {
+      id: "MV",
+      number: { type: "NUMBER", count: 3, separator: "," },
+      type: "STRING",
+    };
+    expect(
+      parseRecordSample("./.:.,.,.:1", ["GT", "MV", "DP"], {
+        GT: gtFormatMetadata,
+        MV: mvFormatMetadata,
+        DP: dpFormatMetadata,
+      }),
+    ).toStrictEqual({ GT: { a: [null, null], p: false, t: "miss" }, MV: [], DP: 1 });
+  });
 });
