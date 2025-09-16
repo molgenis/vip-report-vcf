@@ -1,8 +1,4 @@
-import { parseVcf as parseVcfAlias } from "./VcfParser";
 import { writeVcf as writeVcfAlias } from "./VcfWriter";
-
-// exported variables
-export const parseVcf = parseVcfAlias;
 
 export const writeVcf = writeVcfAlias;
 
@@ -21,6 +17,7 @@ export interface VcfMetadata {
 }
 
 export type VcfRecord = {
+  id: number,
   c: string;
   p: number;
   i: string[];
@@ -29,11 +26,15 @@ export type VcfRecord = {
   q: number | null;
   f: string[];
   n: InfoContainer;
-  s: RecordSample[];
+  s: RecordSamples;
 };
 
 export interface InfoContainer {
   [index: string]: Value | ValueArray;
+}
+
+export interface RecordSamples {
+  [id: number]: RecordSample;
 }
 
 export interface RecordSample {
