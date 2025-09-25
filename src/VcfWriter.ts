@@ -172,7 +172,6 @@ function writeFieldValueMultiple(
 }
 
 function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: ValueObject): string {
-  //FIXME: on id instead of index
   const vcf = [];
   for (const infoField of nestedField.items) {
     if(nestedValues !== null){

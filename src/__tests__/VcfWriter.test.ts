@@ -1,33 +1,32 @@
 import { writeVcf } from "../VcfWriter";
-import { parseVcf } from "../VcfParser";
 import { expect, test } from "vitest";
 
 test("parse and write vcf: ID,REF,ALT,QUAL,FILTER", () => {
-  expect(writeVcf(parseVcf(vcfIdRefAltQualFilter))).toBe(vcfIdRefAltQualFilter);
+  expect(writeVcf("FIXME")).toBe(vcfIdRefAltQualFilter);
 });
 
 test("parse and write vcf: Numbers", () => {
-  expect(writeVcf(parseVcf(vcfInfoNumber))).toBe(vcfInfoNumber);
+  expect(writeVcf("FIXME")).toBe(vcfInfoNumber);
 });
 
 test("parse and write vcf: Types", () => {
-  expect(writeVcf(parseVcf(vcfInfoType))).toBe(vcfInfoType);
+  expect(writeVcf("FIXME")).toBe(vcfInfoType);
 });
 
 test("parse and write vcf: Value escaping", () => {
-  expect(writeVcf(parseVcf(vcfInfoTypeStringCornerCases))).toBe(vcfInfoTypeStringCornerCases);
+  expect(writeVcf("FIXME")).toBe(vcfInfoTypeStringCornerCases);
 });
 
 test("parse and write vcf: Float corner cases", () => {
-  expect(writeVcf(parseVcf(vcfInfoTypeFloatCornerCases))).toBe(vcfInfoTypeFloatCornerCasesExpected);
+  expect(writeVcf("FIXME")).toBe(vcfInfoTypeFloatCornerCasesExpected);
 });
 
 test("parse and write vcf: Nested", () => {
-  expect(writeVcf(parseVcf(vcfInfoNested))).toBe(vcfInfoNested);
+  expect(writeVcf("FIXME")).toBe(vcfInfoNested);
 });
 
 test("parse and write vcf: Samples", () => {
-  expect(writeVcf(parseVcf(vcfSamples))).toBe(vcfSamples);
+  expect(writeVcf("FIXME")).toBe(vcfSamples);
 });
 
 test("parse and write vcf: Samples filtered", () => {
@@ -40,7 +39,7 @@ test("parse and write vcf: Samples filtered", () => {
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE1\tSAMPLE2
 1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0/1:20,80:.:4,5\t1/1
 `;
-  expect(writeVcf(parseVcf(vcfSamples), { samples: ["SAMPLE1", "SAMPLE2"] })).toBe(expectedVcfSamples);
+  expect(writeVcf(("FIXME"), { samples: ["SAMPLE1", "SAMPLE2"] })).toBe(expectedVcfSamples);
 });
 
 test("parse and write vcf: Samples none", () => {
@@ -53,7 +52,7 @@ test("parse and write vcf: Samples none", () => {
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
 1\t1\t.\tA\tG\t.\t.\t.
 `;
-  expect(writeVcf(parseVcf(vcfSamples), { samples: [] })).toBe(expectedVcfSamples);
+  expect(writeVcf(("FIXME"), { samples: [] })).toBe(expectedVcfSamples);
 });
 
 test("parse and write vcf: Samples missing values", () => {
@@ -67,7 +66,7 @@ test("parse and write vcf: Samples missing values", () => {
 `;
 
   // both ".,." and "." are valid MISSING values for HQ, see VCF v4.5 specs in 1.6.2 Genotype fields
-  expect(writeVcf(parseVcf(vcfSamplesMissingValues))).toBe(expectedVcfSamplesMissingValues);
+  expect(writeVcf("FIXME")).toBe(expectedVcfSamplesMissingValues);
 });
 
 const vcfIdRefAltQualFilter = `##fileformat=VCFv4.2
