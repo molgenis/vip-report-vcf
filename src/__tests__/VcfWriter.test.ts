@@ -1,32 +1,661 @@
 import { writeVcf } from "../VcfWriter";
 import { expect, test } from "vitest";
+import { FieldMetadata, VcfContainer } from "../index";
 
-test("parse and write vcf: ID,REF,ALT,QUAL,FILTER", () => {
-  expect(writeVcf("FIXME")).toBe(vcfIdRefAltQualFilter);
+test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##FILTER=<ID=q10,Description="Quality below 10">',
+        '##FILTER=<ID=q20,Description="Quality below 20">',
+        '##FILTER=<ID=PASS,Description="All filters passed">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
+      ],
+      info: {},
+      format: {},
+      samples: [],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: 25,
+        f: ["PASS"],
+        n: {},
+        s: [],
+      },
+      {
+        id: 2,
+        c: "1",
+        p: 2,
+        i: ["id0"],
+        r: "A",
+        a: ["G", "T"],
+        q: 15,
+        f: ["q10"],
+        n: {},
+        s: [],
+      },
+      {
+        id: 3,
+        c: "1",
+        p: 3,
+        i: ["id1", "id2"],
+        r: "A",
+        a: [],
+        q: 5.5,
+        f: ["q10", "q20"],
+        n: {},
+        s: [],
+      },
+      {
+        id: 1,
+        c: "1",
+        p: 4,
+        i: [],
+        r: "A",
+        a: ["G", null],
+        q: null,
+        f: [],
+        n: {},
+        s: [],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfIdRefAltQualFilter);
 });
 
 test("parse and write vcf: Numbers", () => {
-  expect(writeVcf("FIXME")).toBe(vcfInfoNumber);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=STR_A,Number=A,Type=String,Description="String:A">',
+        '##INFO=<ID=STR_R,Number=R,Type=String,Description="String:R">',
+        '##INFO=<ID=STR_G,Number=G,Type=String,Description="String:G">',
+        '##INFO=<ID=STR_X,Number=.,Type=String,Description="String:X">',
+        '##INFO=<ID=STR_1,Number=1,Type=String,Description="String:1">',
+        '##INFO=<ID=STR_2,Number=2,Type=String,Description="String:2">',
+        '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0",
+      ],
+      info: {
+        STR_A: {
+          id: "STR_A",
+          number: {
+            type: "PER_ALT",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String:A",
+        },
+        STR_R: {
+          id: "STR_R",
+          number: {
+            type: "PER_ALT_AND_REF",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String:R",
+        },
+        STR_G: {
+          id: "STR_G",
+          number: {
+            type: "PER_GENOTYPE",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String:G",
+        },
+        STR_X: {
+          id: "STR_X",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String:X",
+        },
+        STR_1: {
+          id: "STR_1",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "String:1",
+        },
+        STR_2: {
+          id: "STR_2",
+          number: {
+            type: "NUMBER",
+            separator: ",",
+            count: 2,
+          },
+          type: "STRING",
+          description: "String:2",
+        },
+      },
+      format: {
+        GT: {
+          id: "GT",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "Genotype",
+        },
+      },
+      samples: ["SAMPLE0"],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: [],
+        q: null,
+        f: [],
+        n: {
+          STR_R: ["A"],
+          STR_G: ["H"],
+          STR_X: ["B", "C", "D"],
+          STR_1: "E",
+          STR_2: ["F", "G"],
+        },
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+          },
+        ],
+      },
+      {
+        id: 1,
+        c: "1",
+        p: 2,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {
+          STR_A: ["A"],
+          STR_R: ["B", "C"],
+          STR_G: ["J"],
+          STR_X: ["D", "E", "F"],
+          STR_1: "G",
+          STR_2: ["H", "I"],
+        },
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+          },
+        ],
+      },
+      {
+        id: 1,
+        c: "1",
+        p: 3,
+        i: [],
+        r: "A",
+        a: ["G", "T"],
+        q: null,
+        f: [],
+        n: {
+          STR_A: ["A", "B"],
+          STR_R: ["C", "D", "E"],
+          STR_G: ["L"],
+          STR_X: ["F", "G", "H"],
+          STR_1: "I",
+          STR_2: ["J", "K"],
+        },
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+          },
+        ],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfInfoNumber);
 });
 
 test("parse and write vcf: Types", () => {
-  expect(writeVcf("FIXME")).toBe(vcfInfoType);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=CHAR,Number=.,Type=Character,Description="Character">',
+        '##INFO=<ID=FLAG,Number=0,Type=Flag,Description="Flag">',
+        '##INFO=<ID=FLOAT,Number=.,Type=Float,Description="Float">',
+        '##INFO=<ID=INT,Number=.,Type=Integer,Description="Integer">',
+        '##INFO=<ID=STRING,Number=.,Type=String,Description="String">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
+      ],
+      info: {
+        CHAR: {
+          id: "CHAR",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "CHARACTER",
+          description: "Character",
+        },
+        FLAG: {
+          id: "FLAG",
+          number: {
+            type: "NUMBER",
+            count: 0,
+          },
+          type: "FLAG",
+          description: "Flag",
+        },
+        FLOAT: {
+          id: "FLOAT",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "FLOAT",
+          description: "Float",
+        },
+        INT: {
+          id: "INT",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "INTEGER",
+          description: "Integer",
+        },
+        STRING: {
+          id: "STRING",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String",
+        },
+      },
+      format: {},
+      samples: [],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {
+          CHAR: ["X"],
+          FLAG: true,
+          FLOAT: [1.2],
+          INT: [3],
+          STRING: ["ABC"],
+        },
+        s: [],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfInfoType);
 });
 
 test("parse and write vcf: Value escaping", () => {
-  expect(writeVcf("FIXME")).toBe(vcfInfoTypeStringCornerCases);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=STRING,Number=.,Type=String,Description="String">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
+      ],
+      info: {
+        STRING: {
+          id: "STRING",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String",
+        },
+      },
+      format: {},
+      samples: [],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {
+          STRING: [":;=%,\r\n\t"],
+        },
+        s: [],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfInfoTypeStringCornerCases);
 });
 
 test("parse and write vcf: Float corner cases", () => {
-  expect(writeVcf("FIXME")).toBe(vcfInfoTypeFloatCornerCasesExpected);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=FLOAT,Number=.,Type=Float,Description="Float corner cases">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
+      ],
+      info: {
+        FLOAT: {
+          id: "FLOAT",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "FLOAT",
+          description: "Float corner cases",
+        },
+      },
+      format: {},
+      samples: [],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {
+          FLOAT: [Infinity, -Infinity, NaN],
+        },
+        s: [],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfInfoTypeFloatCornerCasesExpected);
 });
 
 test("parse and write vcf: Nested", () => {
-  expect(writeVcf("FIXME")).toBe(vcfInfoNested);
+  const parent = {
+    id: "CSQ",
+    number: {
+      type: "OTHER",
+      separator: ",",
+    },
+    type: "STRING",
+    description:
+      "Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|PICK|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN",
+    nested: {
+      separator: "|",
+      items: [],
+    },
+  } as FieldMetadata;
+
+  const items = [
+    {
+      id: "Allele",
+      number: {
+        type: "NUMBER",
+        count: 1,
+      },
+      type: "STRING",
+      parent: parent,
+    },
+    {
+      id: "Consequence",
+      number: {
+        type: "OTHER",
+      },
+      type: "STRING",
+      parent: parent,
+    },
+    {
+      id: "IMPACT",
+      number: {
+        type: "NUMBER",
+        count: 1,
+      },
+      type: "STRING",
+      parent: parent,
+    },
+    {
+      id: "SYMBOL",
+      number: {
+        type: "NUMBER",
+        count: 1,
+      },
+      type: "STRING",
+      parent: parent,
+    },
+    {
+      id: "Gene",
+      number: {
+        type: "NUMBER",
+        count: 1,
+      },
+      type: "STRING",
+      parent: parent,
+    },
+    {
+      id: "Feature_type",
+      number: {
+        type: "NUMBER",
+        count: 1,
+      },
+      type: "STRING",
+      parent: parent,
+    },
+  ] as FieldMetadata[];
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|PICK|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
+      ],
+      info: {
+        CSQ: {
+          id: "CSQ",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "STRING",
+          description:
+            "Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type",
+          nested: {
+            separator: "|",
+            items: items,
+          },
+        },
+      },
+      format: {},
+      samples: [],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: ["PASS"],
+        n: {
+          CSQ: [
+            {
+              Allele: "G",
+              Consequence: ["splice_acceptor_variant", "intro_variant"],
+              IMPACT: "HIGH",
+              SYMBOL: "SHOX",
+              Gene: "6473",
+              Feature_type: "Transcript",
+            },
+            {
+              Allele: "G",
+              Consequence: ["splice_acceptor_variant"],
+              IMPACT: "HIGH",
+              SYMBOL: "SHOX",
+              Gene: "6473",
+              Feature_type: "Transcript",
+            },
+            {
+              Allele: "G",
+              Consequence: ["regulatory_region_variant"],
+              IMPACT: "MODIFIER",
+              SYMBOL: null,
+              Gene: null,
+              Feature_type: "RegulatoryFeature",
+            },
+          ],
+        },
+        s: [],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfInfoNested);
 });
 
 test("parse and write vcf: Samples", () => {
-  expect(writeVcf("FIXME")).toBe(vcfSamples);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+        '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
+        '##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">',
+        '##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2",
+      ],
+      info: {},
+      format: {
+        GT: {
+          id: "GT",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "Genotype",
+        },
+        GQ: {
+          id: "GQ",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "INTEGER",
+          description: "Genotype Quality",
+        },
+        HQ: {
+          id: "HQ",
+          number: {
+            type: "NUMBER",
+            separator: ",",
+            count: 2,
+          },
+          type: "INTEGER",
+          description: "Haplotype Quality",
+        },
+        AD: {
+          id: "AD",
+          number: {
+            type: "PER_ALT_AND_REF",
+            separator: ",",
+          },
+          type: "INTEGER",
+          description: "Allelic depths for the ref and alt alleles in the order listed",
+        },
+      },
+      samples: ["SAMPLE0", "SAMPLE1", "SAMPLE2"],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {},
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+            AD: [1, 50],
+            GQ: 1,
+            HQ: [2, 3],
+          },
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: false,
+            },
+            AD: [20, 80],
+            GQ: null,
+            HQ: [4, 5],
+          },
+          {
+            GT: {
+              a: [1, 1],
+              t: "hom_a",
+              p: false,
+            },
+          },
+        ],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfSamples);
 });
 
 test("parse and write vcf: Samples filtered", () => {
@@ -39,7 +668,103 @@ test("parse and write vcf: Samples filtered", () => {
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE1\tSAMPLE2
 1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0/1:20,80:.:4,5\t1/1
 `;
-  expect(writeVcf(("FIXME"), { samples: ["SAMPLE1", "SAMPLE2"] })).toBe(expectedVcfSamples);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+        '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
+        '##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">',
+        '##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2",
+      ],
+      info: {},
+      format: {
+        GT: {
+          id: "GT",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "Genotype",
+        },
+        GQ: {
+          id: "GQ",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "INTEGER",
+          description: "Genotype Quality",
+        },
+        HQ: {
+          id: "HQ",
+          number: {
+            type: "NUMBER",
+            separator: ",",
+            count: 2,
+          },
+          type: "INTEGER",
+          description: "Haplotype Quality",
+        },
+        AD: {
+          id: "AD",
+          number: {
+            type: "PER_ALT_AND_REF",
+            separator: ",",
+          },
+          type: "INTEGER",
+          description: "Allelic depths for the ref and alt alleles in the order listed",
+        },
+      },
+      samples: ["SAMPLE0", "SAMPLE1", "SAMPLE2"],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {},
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+            AD: [1, 50],
+            GQ: 1,
+            HQ: [2, 3],
+          },
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: false,
+            },
+            AD: [20, 80],
+            GQ: null,
+            HQ: [4, 5],
+          },
+          {
+            GT: {
+              a: [1, 1],
+              t: "hom_a",
+              p: false,
+            },
+          },
+        ],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input, { samples: ["SAMPLE1", "SAMPLE2"] })).toBe(expectedVcfSamples);
 });
 
 test("parse and write vcf: Samples none", () => {
@@ -52,7 +777,103 @@ test("parse and write vcf: Samples none", () => {
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
 1\t1\t.\tA\tG\t.\t.\t.
 `;
-  expect(writeVcf(("FIXME"), { samples: [] })).toBe(expectedVcfSamples);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+        '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
+        '##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">',
+        '##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2",
+      ],
+      info: {},
+      format: {
+        GT: {
+          id: "GT",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "Genotype",
+        },
+        GQ: {
+          id: "GQ",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "INTEGER",
+          description: "Genotype Quality",
+        },
+        HQ: {
+          id: "HQ",
+          number: {
+            type: "NUMBER",
+            separator: ",",
+            count: 2,
+          },
+          type: "INTEGER",
+          description: "Haplotype Quality",
+        },
+        AD: {
+          id: "AD",
+          number: {
+            type: "PER_ALT_AND_REF",
+            separator: ",",
+          },
+          type: "INTEGER",
+          description: "Allelic depths for the ref and alt alleles in the order listed",
+        },
+      },
+      samples: ["SAMPLE0", "SAMPLE1", "SAMPLE2"],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {},
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+            AD: [1, 50],
+            GQ: 1,
+            HQ: [2, 3],
+          },
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: false,
+            },
+            AD: [20, 80],
+            GQ: null,
+            HQ: [4, 5],
+          },
+          {
+            GT: {
+              a: [1, 1],
+              t: "hom_a",
+              p: false,
+            },
+          },
+        ],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input, { samples: [] })).toBe(expectedVcfSamples);
 });
 
 test("parse and write vcf: Samples missing values", () => {
@@ -66,7 +887,93 @@ test("parse and write vcf: Samples missing values", () => {
 `;
 
   // both ".,." and "." are valid MISSING values for HQ, see VCF v4.5 specs in 1.6.2 Genotype fields
-  expect(writeVcf("FIXME")).toBe(expectedVcfSamplesMissingValues);
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+        '##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">',
+        '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2",
+      ],
+      info: {},
+      format: {
+        GT: {
+          id: "GT",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "Genotype",
+        },
+        HQ: {
+          id: "HQ",
+          number: {
+            type: "NUMBER",
+            separator: ",",
+            count: 2,
+          },
+          type: "INTEGER",
+          description: "Haplotype Quality",
+        },
+        GQ: {
+          id: "GQ",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "INTEGER",
+          description: "Genotype Quality",
+        },
+      },
+      samples: ["SAMPLE0", "SAMPLE1", "SAMPLE2"],
+    },
+    data: [
+      {
+        id: 1,
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {},
+        s: [
+          {
+            GT: {
+              a: [null, 1],
+              t: "part",
+              p: true,
+            },
+            HQ: [],
+            GQ: 1,
+          },
+          {
+            GT: {
+              a: [0, null],
+              t: "part",
+              p: false,
+            },
+            HQ: [],
+            GQ: 2,
+          },
+          {
+            GT: {
+              a: [1, 1],
+              t: "hom_a",
+              p: false,
+            },
+            HQ: [null, 4],
+            GQ: 3,
+          },
+        ],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(expectedVcfSamplesMissingValues);
 });
 
 const vcfIdRefAltQualFilter = `##fileformat=VCFv4.2
@@ -114,25 +1021,18 @@ const vcfInfoTypeStringCornerCases = `##fileformat=VCFv4.2
 1\t1\t.\tA\tG\t.\t.\tSTRING=%3A%3B%3D%25%2C%0D%0A%09
 `;
 
-const vcfInfoTypeFloatCornerCases = `##fileformat=VCFv4.2
-##INFO=<ID=FLOAT,Number=.,Type=Float,Description="Float corner cases">
-##contig=<ID=1,length=249250621,assembly=b37>
-#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
-1\t1\t.\tA\tG\t.\t.\tFLOAT=INF,INFINITY,+inf,+infinity,-INF,-INFINITY,NaN,NAN
-`;
-
 const vcfInfoTypeFloatCornerCasesExpected = `##fileformat=VCFv4.2
 ##INFO=<ID=FLOAT,Number=.,Type=Float,Description="Float corner cases">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
-1\t1\t.\tA\tG\t.\t.\tFLOAT=Infinity,Infinity,Infinity,Infinity,-Infinity,-Infinity,NaN,NaN
+1\t1\t.\tA\tG\t.\t.\tFLOAT=Infinity,-Infinity,NaN
 `;
 
 const vcfInfoNested = `##fileformat=VCFv4.2
 ##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|PICK|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
-1\t1\t.\tA\tG\t.\tPASS\tCSQ=G|splice_acceptor_variant&intro_variant|HIGH|SHOX|6473|Transcript|NM_000451.3|protein_coding||2/5|c.278-2A>G||||||||1||1||1|EntrezGene||||||||||||||||||20|2|20|2|0.06|0.98|0.01|0.01|SHOX|VUS|0.97629046|1|XL||||,G|splice_acceptor_variant|HIGH|SHOX|6473|Transcript|NM_006883.2|protein_coding||2/5|c.278-2A>G||||||||1||1|||EntrezGene||||||||||||||||||20|2|20|2|0.06|0.98|0.01|0.01|SHOX|VUS|0.97629046|1|XL||||,G|regulatory_region_variant|MODIFIER|||RegulatoryFeature|ENSR00002094130|open_chromatin_region|||||||||||1|||||||||||||||||||||||||||||||||||||||
+1\t1\t.\tA\tG\t.\tPASS\tCSQ=G|splice_acceptor_variant&intro_variant|HIGH|SHOX|6473|Transcript,G|splice_acceptor_variant|HIGH|SHOX|6473|Transcript,G|regulatory_region_variant|MODIFIER|||RegulatoryFeature
 `;
 
 const vcfSamples = `##fileformat=VCFv4.2
@@ -143,13 +1043,4 @@ const vcfSamples = `##fileformat=VCFv4.2
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
 1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0|1:1,50:1:2,3\t0/1:20,80:.:4,5\t1/1
-`;
-
-const vcfSamplesMissingValues = `##fileformat=VCFv4.2
-##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
-##FORMAT=<ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality">
-##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
-##contig=<ID=1,length=249250621,assembly=b37>
-#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t.|1:.:1\t0/.:.,.:2\t1/1:.,4:3
 `;
