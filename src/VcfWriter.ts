@@ -6,10 +6,12 @@ import {
   Genotype,
   InfoContainer,
   NestedFieldMetadata,
-  RecordSample, RecordSamples,
+  RecordSample,
+  RecordSamples,
   RecordSampleType,
   Value,
-  ValueArray, ValueObject,
+  ValueArray,
+  ValueObject,
   VcfContainer,
   VcfMetadata,
   VcfRecord,
@@ -69,11 +71,11 @@ function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): 
   const samples = filter.samples ? filterSamples(metadata.samples, record.s, filter.samples) : record.s;
   if (Object.keys(samples).length > 0) {
     vcf.push(writeFormat(samples));
-      Object.keys(samples).forEach(id => {
-        const sample = samples[Number(id)];
-        vcf.push(writeSample(metadata.format, sample as RecordSample));
-      });
-    }
+    Object.keys(samples).forEach((id) => {
+      const sample = samples[Number(id)];
+      vcf.push(writeSample(metadata.format, sample as RecordSample));
+    });
+  }
 
   return vcf.join("\t");
 }
@@ -105,11 +107,11 @@ function writeRef(ref: string): string {
 }
 
 function writeAlts(alts: (string | null)[]): string {
-  return alts.length > 0 ? alts.map((alt) => (alt !== null && alt !== undefined ? writeString(alt) : MISSING)).join(",") : MISSING;
+  return alts.length > 0 ? alts.map((alt) => (alt !== null ? writeString(alt) : MISSING)).join(",") : MISSING;
 }
 
 function writeQual(quality: number | null): string {
-  return quality !== null && quality !== undefined ? quality.toString() : MISSING;
+  return quality !== null ? quality.toString() : MISSING;
 }
 
 function writeFilters(filters: string[]): string {
@@ -174,7 +176,7 @@ function writeFieldValueMultiple(
 function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: ValueObject): string {
   const vcf = [];
   for (const infoField of nestedField.items) {
-    if(nestedValues !== null){
+    if (nestedValues !== null) {
       if (infoField.number.count === 1) {
         vcf.push(writeFieldValueSingle(infoField, nestedValues[infoField.id]!, ""));
       } else {
@@ -191,13 +193,14 @@ function writeFieldValue(field: FieldMetadata, value: Value, missingValue: strin
     case "CATEGORICAL":
     case "CHARACTER":
     case "STRING":
-      vcf = value !== null && value !== undefined ? writeString(value as string) : missingValue;
+      vcf = value !== null ? writeString(value as string) : missingValue;
       break;
     case "FLOAT":
     case "INTEGER":
-      vcf = value !== null && value !== undefined ? `${value as number}` : missingValue;
+      vcf = value !== null ? `${value as number}` : missingValue;
       break;
-    case "FLAG": vcf = value !== null && value !== undefined ? "1" : "";
+    case "FLAG":
+      vcf = value !== null ? "1" : "";
       break;
     default:
       throw new Error(`invalid info value type '${field.type}'`);
@@ -225,7 +228,7 @@ function writeFormat(samples: RecordSamples): string {
 function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample): string {
   const vcf = [];
   for (const [key, value] of Object.entries(sample)) {
-    if(formatFields[key] !== undefined){
+    if (formatFields[key] !== undefined) {
       vcf.push(writeSampleValue(formatFields[key], value));
     }
   }
@@ -243,7 +246,7 @@ function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): 
       vcf = value !== null ? writeFieldValueSingle(formatField, value as Value) : MISSING;
     } else {
       const valueArray = value as ValueArray;
-      vcf = valueArray !== null && valueArray.length > 0 ? writeFieldValueMultiple(formatField, valueArray, ",") : MISSING;
+      vcf = valueArray.length > 0 ? writeFieldValueMultiple(formatField, valueArray, ",") : MISSING;
     }
   }
   return vcf;
