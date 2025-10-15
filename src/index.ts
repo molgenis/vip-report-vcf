@@ -17,7 +17,6 @@ export interface VcfMetadata {
 }
 
 export type VcfRecord = {
-  id: number,
   c: string;
   p: number;
   i: string[];
@@ -26,19 +25,15 @@ export type VcfRecord = {
   q: number | null;
   f: string[];
   n: InfoContainer;
-  s: RecordSamples;
+  s: RecordSample[];
 };
 
 export interface InfoContainer {
   [index: string]: Value | ValueArray;
 }
 
-export interface RecordSamples {
-  [id: number]: RecordSample;
-}
-
 export interface RecordSample {
-  [index: string]: RecordSampleType;
+  [index: number]: RecordSampleType;
 }
 
 export type Value = ValueCharacter | ValueFlag | ValueFloat | ValueInteger | ValueObject | ValueString | ValueArray;

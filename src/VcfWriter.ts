@@ -7,7 +7,6 @@ import {
   InfoContainer,
   NestedFieldMetadata,
   RecordSample,
-  RecordSamples,
   RecordSampleType,
   Value,
   ValueArray,
@@ -80,7 +79,7 @@ function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): 
   return vcf.join("\t");
 }
 
-function filterSamples(sampleIds: string[], samples: RecordSamples, filterSampleIds: string[]): RecordSamples {
+function filterSamples(sampleIds: string[], samples: RecordSample[], filterSampleIds: string[]): RecordSample[] {
   const filterSamples = [];
   for (const [index, sample] of sampleIds.entries()) {
     if (filterSampleIds.indexOf(sample) !== -1) {
@@ -220,7 +219,7 @@ function writeString(value: string) {
     .replace("\t", "%09");
 }
 
-function writeFormat(samples: RecordSamples): string {
+function writeFormat(samples: RecordSample[]): string {
   const keys = Object.keys(samples[0]!);
   return keys.length > 0 ? keys.map(writeString).join(":") : MISSING;
 }
@@ -228,9 +227,10 @@ function writeFormat(samples: RecordSamples): string {
 function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample): string {
   const vcf = [];
   for (const [key, value] of Object.entries(sample)) {
-    if (formatFields[key] !== undefined) {
-      vcf.push(writeSampleValue(formatFields[key], value));
+    if (formatFields[key] === undefined) {
+      throw Error(`Unknown FORMAT field '${key}'`);
     }
+    vcf.push(writeSampleValue(formatFields[key], value));
   }
   return vcf.join(":");
 }
