@@ -33,7 +33,7 @@ export interface InfoContainer {
 }
 
 export interface RecordSample {
-  [index: number]: RecordSampleType;
+  [index: string]: RecordSampleType;
 }
 
 export type Value = ValueCharacter | ValueFlag | ValueFloat | ValueInteger | ValueObject | ValueString | ValueArray;

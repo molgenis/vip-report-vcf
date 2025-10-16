@@ -19,7 +19,6 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -31,7 +30,6 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         s: [],
       },
       {
-        id: 2,
         c: "1",
         p: 2,
         i: ["id0"],
@@ -43,7 +41,6 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         s: [],
       },
       {
-        id: 3,
         c: "1",
         p: 3,
         i: ["id1", "id2"],
@@ -55,7 +52,6 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         s: [],
       },
       {
-        id: 1,
         c: "1",
         p: 4,
         i: [],
@@ -158,7 +154,6 @@ test("parse and write vcf: Numbers", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -184,7 +179,6 @@ test("parse and write vcf: Numbers", () => {
         ],
       },
       {
-        id: 1,
         c: "1",
         p: 2,
         i: [],
@@ -307,7 +301,6 @@ test("parse and write vcf: Types", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -354,7 +347,6 @@ test("parse and write vcf: Value escaping", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -397,7 +389,6 @@ test("parse and write vcf: Float corner cases", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -515,7 +506,6 @@ test("parse and write vcf: Nested", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -614,7 +604,6 @@ test("parse and write vcf: Samples", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -723,7 +712,6 @@ test("parse and write vcf: Samples filtered", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -832,7 +820,6 @@ test("parse and write vcf: Samples none", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
@@ -932,7 +919,6 @@ test("parse and write vcf: Samples missing values", () => {
     },
     data: [
       {
-        id: 1,
         c: "1",
         p: 1,
         i: [],
