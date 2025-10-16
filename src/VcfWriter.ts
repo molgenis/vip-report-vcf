@@ -10,11 +10,12 @@ import {
   RecordSampleType,
   Value,
   ValueArray,
+  ValueObject,
   VcfContainer,
   VcfMetadata,
   VcfRecord,
 } from "./index";
-import { MISSING } from "./Constants";
+const MISSING = ".";
 
 export function writeVcf(container: VcfContainer, filter: Filter = {}): string {
   const vcf = [];
@@ -67,11 +68,12 @@ function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): 
   vcf.push(writeInfo(metadata.info, record.n));
 
   const samples = filter.samples ? filterSamples(metadata.samples, record.s, filter.samples) : record.s;
-  if (samples.length > 0) {
+  if (Object.keys(samples).length > 0) {
     vcf.push(writeFormat(samples));
-    for (const sample of samples) {
-      vcf.push(writeSample(metadata.format, sample));
-    }
+    Object.keys(samples).forEach((id) => {
+      const sample = samples[Number(id)];
+      vcf.push(writeSample(metadata.format, sample as RecordSample));
+    });
   }
 
   return vcf.join("\t");
@@ -144,7 +146,7 @@ function writeInfoField(infoField: FieldMetadata, infoValue: Value | ValueArray)
 function writeFieldValueSingle(field: FieldMetadata, value: Value, missingValue = MISSING): string {
   let vcf;
   if (field.nested) {
-    vcf = writeFieldValueNested(field.nested, value as ValueArray);
+    vcf = writeFieldValueNested(field.nested, value as ValueObject);
   } else {
     vcf = writeFieldValue(field, value, missingValue);
   }
@@ -161,7 +163,7 @@ function writeFieldValueMultiple(
 
   for (const infoValue of values) {
     if (field.nested) {
-      vcf.push(writeFieldValueNested(field.nested, infoValue as ValueArray));
+      vcf.push(writeFieldValueNested(field.nested, infoValue as ValueObject));
     } else {
       vcf.push(writeFieldValue(field, infoValue, missingValue));
     }
@@ -170,13 +172,15 @@ function writeFieldValueMultiple(
   return vcf.join(separator);
 }
 
-function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: ValueArray): string {
+function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: ValueObject): string {
   const vcf = [];
-  for (const [index, infoField] of nestedField.items.entries()) {
-    if (infoField.number.count === 1) {
-      vcf.push(writeFieldValueSingle(infoField, nestedValues[index]!, ""));
-    } else {
-      vcf.push(writeFieldValueMultiple(infoField, nestedValues[index]! as ValueArray, "&", ""));
+  for (const infoField of nestedField.items) {
+    if (nestedValues !== null) {
+      if (infoField.number.count === 1) {
+        vcf.push(writeFieldValueSingle(infoField, nestedValues[infoField.id]!, ""));
+      } else {
+        vcf.push(writeFieldValueMultiple(infoField, nestedValues[infoField.id]! as ValueArray, "&", ""));
+      }
     }
   }
   return vcf.join(nestedField.separator);
@@ -195,6 +199,8 @@ function writeFieldValue(field: FieldMetadata, value: Value, missingValue: strin
       vcf = value !== null ? `${value as number}` : missingValue;
       break;
     case "FLAG":
+      vcf = value !== null ? "1" : "";
+      break;
     default:
       throw new Error(`invalid info value type '${field.type}'`);
   }
@@ -221,7 +227,10 @@ function writeFormat(samples: RecordSample[]): string {
 function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample): string {
   const vcf = [];
   for (const [key, value] of Object.entries(sample)) {
-    vcf.push(writeSampleValue(formatFields[key]!, value));
+    if (formatFields[key] === undefined) {
+      throw Error(`Unknown FORMAT field '${key}'`);
+    }
+    vcf.push(writeSampleValue(formatFields[key], value));
   }
   return vcf.join(":");
 }

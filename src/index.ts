@@ -1,8 +1,4 @@
-import { parseVcf as parseVcfAlias } from "./VcfParser";
 import { writeVcf as writeVcfAlias } from "./VcfWriter";
-
-// exported variables
-export const parseVcf = parseVcfAlias;
 
 export const writeVcf = writeVcfAlias;
 
