@@ -207,9 +207,6 @@ function writeFieldValue(field: FieldMetadata, value: Value, missingValue: strin
     case "INTEGER":
       vcf = value !== null ? `${value as number}` : missingValue;
       break;
-    case "FLAG":
-      vcf = value !== null ? "1" : "";
-      break;
     default:
       throw new Error(`invalid info value type '${field.type}'`);
   }
