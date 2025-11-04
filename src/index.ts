@@ -71,6 +71,7 @@ export interface FieldMetadata {
   categories?: CategoryRecord;
   required?: boolean;
   nullValue?: ValueDescription;
+  separator?: string;
   nested?: NestedFieldMetadata;
   parent?: FieldMetadata;
 }
