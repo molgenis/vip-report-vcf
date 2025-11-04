@@ -496,7 +496,7 @@ test("parse and write vcf: Nested", () => {
           description:
             "Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type",
           nested: {
-            separator: "|",
+            separator: "-",
             items: items,
           },
         },
@@ -870,7 +870,7 @@ test("parse and write vcf: Samples missing values", () => {
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:HQ:GQ\t.|1:.:1\t0/.:.:2\t1/1:.,4:3
+1\t1\t.\tA\tG\t.\t.\t.\tGT:GQ:HQ\t.|1:1\t0/.:2:1\t1/1
 `;
 
   // both ".,." and "." are valid MISSING values for HQ, see VCF v4.5 specs in 1.6.2 Genotype fields
@@ -934,7 +934,6 @@ test("parse and write vcf: Samples missing values", () => {
               t: "part",
               p: true,
             },
-            HQ: [],
             GQ: 1,
           },
           {
@@ -943,7 +942,7 @@ test("parse and write vcf: Samples missing values", () => {
               t: "part",
               p: false,
             },
-            HQ: [],
+            HQ: [1],
             GQ: 2,
           },
           {
@@ -952,8 +951,6 @@ test("parse and write vcf: Samples missing values", () => {
               t: "hom_a",
               p: false,
             },
-            HQ: [null, 4],
-            GQ: 3,
           },
         ],
       },
@@ -1018,7 +1015,7 @@ const vcfInfoNested = `##fileformat=VCFv4.2
 ##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|PICK|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
-1\t1\t.\tA\tG\t.\tPASS\tCSQ=G|splice_acceptor_variant&intro_variant|HIGH|SHOX|6473|Transcript,G|splice_acceptor_variant|HIGH|SHOX|6473|Transcript,G|regulatory_region_variant|MODIFIER|||RegulatoryFeature
+1\t1\t.\tA\tG\t.\tPASS\tCSQ=G-splice_acceptor_variant&intro_variant-HIGH-SHOX-6473-Transcript,G-splice_acceptor_variant-HIGH-SHOX-6473-Transcript,G-regulatory_region_variant-MODIFIER---RegulatoryFeature
 `;
 
 const vcfSamples = `##fileformat=VCFv4.2

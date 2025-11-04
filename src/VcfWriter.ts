@@ -69,10 +69,11 @@ function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): 
 
   const samples = filter.samples ? filterSamples(metadata.samples, record.s, filter.samples) : record.s;
   if (Object.keys(samples).length > 0) {
-    vcf.push(writeFormat(samples));
+    const formatKeys = writeFormat(samples);
+    vcf.push(formatKeys.length > 0 ? formatKeys.map(writeString).join(":") : MISSING);
     Object.keys(samples).forEach((id) => {
       const sample = samples[Number(id)];
-      vcf.push(writeSample(metadata.format, sample as RecordSample));
+      vcf.push(writeSample(metadata.format, sample as RecordSample, formatKeys));
     });
   }
 
@@ -163,23 +164,31 @@ function writeFieldValueMultiple(
 
   for (const infoValue of values) {
     if (field.nested) {
-      vcf.push(writeFieldValueNested(field.nested, infoValue as ValueObject));
+      const separator = field.nested.separator !== undefined ? field.nested.separator : "&";
+      vcf.push(writeFieldValueNested(field.nested, infoValue as ValueObject, separator));
     } else {
       vcf.push(writeFieldValue(field, infoValue, missingValue));
     }
   }
-
   return vcf.join(separator);
 }
 
-function writeFieldValueNested(nestedField: NestedFieldMetadata, nestedValues: ValueObject): string {
+function writeFieldValueNested(
+  nestedField: NestedFieldMetadata,
+  nestedValues: ValueObject,
+  separator?: string,
+): string {
   const vcf = [];
   for (const infoField of nestedField.items) {
     if (nestedValues !== null) {
       if (infoField.number.count === 1) {
         vcf.push(writeFieldValueSingle(infoField, nestedValues[infoField.id]!, ""));
       } else {
-        vcf.push(writeFieldValueMultiple(infoField, nestedValues[infoField.id]! as ValueArray, "&", ""));
+        if (!separator) {
+          throw new Error(`Missing separator for multiValue field '${infoField}'`);
+        }
+        const nestedSeparator = infoField.separator !== undefined ? infoField.separator : "&";
+        vcf.push(writeFieldValueMultiple(infoField, nestedValues[infoField.id]! as ValueArray, nestedSeparator, ""));
       }
     }
   }
@@ -197,9 +206,6 @@ function writeFieldValue(field: FieldMetadata, value: Value, missingValue: strin
     case "FLOAT":
     case "INTEGER":
       vcf = value !== null ? `${value as number}` : missingValue;
-      break;
-    case "FLAG":
-      vcf = value !== null ? "1" : "";
       break;
     default:
       throw new Error(`invalid info value type '${field.type}'`);
@@ -219,20 +225,49 @@ function writeString(value: string) {
     .replace("\t", "%09");
 }
 
-function writeFormat(samples: RecordSample[]): string {
-  const keys = Object.keys(samples[0]!);
-  return keys.length > 0 ? keys.map(writeString).join(":") : MISSING;
+function moveToFirstIndex(arr: string[], item: string): string[] {
+  const idx = arr.indexOf(item);
+
+  if (idx > -1) {
+    arr.splice(idx, 1);
+    arr.unshift(item);
+  }
+
+  return arr;
 }
 
-function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample): string {
-  const vcf = [];
-  for (const [key, value] of Object.entries(sample)) {
-    if (formatFields[key] === undefined) {
-      throw Error(`Unknown FORMAT field '${key}'`);
+function writeFormat(samples: RecordSample[]): string[] {
+  let keys: string[] = [];
+  for (const sample of samples) {
+    for (const key of Object.keys(sample)) {
+      if (!keys.includes(key)) {
+        keys.push(key);
+      }
     }
+  }
+  keys = moveToFirstIndex(keys, "GT");
+  return keys;
+}
+
+//Trailing missing FORMAT values are not required
+function removeTrailingEmptyStrings(arr: string[]): string[] {
+  let lastNonEmpty = arr.length - 1;
+  while (lastNonEmpty >= 0 && (arr[lastNonEmpty] === "" || arr[lastNonEmpty] === MISSING)) {
+    lastNonEmpty--;
+  }
+  return arr.slice(0, lastNonEmpty + 1);
+}
+
+function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample, keys: string[]): string {
+  const vcf = [];
+  for (const key of keys) {
+    if (formatFields[key] === undefined) {
+      throw new Error(`Unknown FORMAT field '${key}'`);
+    }
+    const value = sample[key] !== undefined ? sample[key] : "";
     vcf.push(writeSampleValue(formatFields[key], value));
   }
-  return vcf.join(":");
+  return removeTrailingEmptyStrings(vcf).join(":");
 }
 
 function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): string {
