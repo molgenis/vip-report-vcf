@@ -212,6 +212,10 @@ function writeFieldValue(field: FieldMetadata, value: Value, missingValue: strin
     case "INTEGER":
       vcf = value !== null ? `${value as number}` : missingValue;
       break;
+    //FLAG has a value in nested fields like VEP, this function is not called for unnested FLAGs since they have NUMBER=0
+    case "FLAG":
+      vcf = value !== null ? "1" : "";
+      break;
     default:
       throw new Error(`invalid info value type '${field.type}'`);
   }
