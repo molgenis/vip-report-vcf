@@ -69,10 +69,10 @@ function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): 
 
   const samples = filter.samples ? filterSamples(metadata.samples, record.s, filter.samples) : record.s;
   if (Object.keys(samples).length > 0) {
-    const formatKeys = writeFormat(samples);
-    vcf.push(formatKeys.length > 0 ? formatKeys.map(writeString).join(":") : MISSING);
+    vcf.push(record.g !== null && record.g !== "" ? record.g : MISSING);
     Object.keys(samples).forEach((id) => {
       const sample = samples[Number(id)];
+      const formatKeys = record.g !== null && record.g !== "" ? record.g.split(":") : [];
       vcf.push(writeSample(metadata.format, sample as RecordSample, formatKeys));
     });
   }
@@ -236,30 +236,6 @@ function writeString(value: string) {
     .replace("\r", "%0D")
     .replace("\n", "%0A")
     .replace("\t", "%09");
-}
-
-function moveToFirstIndex(arr: string[], item: string): string[] {
-  const idx = arr.indexOf(item);
-
-  if (idx > -1) {
-    arr.splice(idx, 1);
-    arr.unshift(item);
-  }
-
-  return arr;
-}
-
-function writeFormat(samples: RecordSample[]): string[] {
-  let keys: string[] = [];
-  for (const sample of samples) {
-    for (const key of Object.keys(sample)) {
-      if (!keys.includes(key)) {
-        keys.push(key);
-      }
-    }
-  }
-  keys = moveToFirstIndex(keys, "GT");
-  return keys;
 }
 
 //Trailing missing FORMAT values are not required

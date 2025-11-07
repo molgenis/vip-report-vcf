@@ -24,6 +24,7 @@ export type VcfRecord = {
   a: (string | null)[];
   q: number | null;
   f: string[];
+  g: string | null; //original format string, letter f is already taken for 'filter'
   n: InfoContainer;
   s: RecordSample[];
 };

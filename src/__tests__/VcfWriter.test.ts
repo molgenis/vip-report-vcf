@@ -27,6 +27,7 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         q: 25,
         f: ["PASS"],
         n: {},
+        g: null,
         s: [],
       },
       {
@@ -38,6 +39,7 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         q: 15,
         f: ["q10"],
         n: {},
+        g: null,
         s: [],
       },
       {
@@ -49,6 +51,7 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         q: 5.5,
         f: ["q10", "q20"],
         n: {},
+        g: null,
         s: [],
       },
       {
@@ -60,6 +63,7 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
         q: null,
         f: [],
         n: {},
+        g: "",
         s: [],
       },
     ],
@@ -168,6 +172,7 @@ test("parse and write vcf: Numbers", () => {
           STR_1: "E",
           STR_2: ["F", "G"],
         },
+        g: "GT",
         s: [
           {
             GT: {
@@ -194,6 +199,7 @@ test("parse and write vcf: Numbers", () => {
           STR_1: "G",
           STR_2: ["H", "I"],
         },
+        g: "GT",
         s: [
           {
             GT: {
@@ -221,6 +227,7 @@ test("parse and write vcf: Numbers", () => {
           STR_1: "I",
           STR_2: ["J", "K"],
         },
+        g: "GT",
         s: [
           {
             GT: {
@@ -315,6 +322,7 @@ test("parse and write vcf: Types", () => {
           INT: [3],
           STRING: ["ABC"],
         },
+        g: null,
         s: [],
       },
     ],
@@ -401,6 +409,7 @@ test("parse and write vcf: Types", () => {
           INT: [3],
           STRING: ["ABC"],
         },
+        g: "",
         s: [],
       },
     ],
@@ -443,6 +452,7 @@ test("parse and write vcf: Value escaping", () => {
         n: {
           STRING: [":;=%,\r\n\t"],
         },
+        g: "",
         s: [],
       },
     ],
@@ -485,6 +495,7 @@ test("parse and write vcf: Float corner cases", () => {
         n: {
           FLOAT: [Infinity, -Infinity, NaN],
         },
+        g: null,
         s: [],
       },
     ],
@@ -628,6 +639,7 @@ test("parse and write vcf: Nested", () => {
             },
           ],
         },
+        g: "",
         s: [],
       },
     ],
@@ -699,6 +711,7 @@ test("parse and write vcf: Samples", () => {
         q: null,
         f: [],
         n: {},
+        g: "GT:GQ:AD:HQ",
         s: [
           {
             GT: {
@@ -807,6 +820,7 @@ test("parse and write vcf: Samples filtered", () => {
         q: null,
         f: [],
         n: {},
+        g: "GT:AD:GQ:HQ",
         s: [
           {
             GT: {
@@ -915,6 +929,7 @@ test("parse and write vcf: Samples none", () => {
         q: null,
         f: [],
         n: {},
+        g: "GT:AD:GQ:HQ",
         s: [
           {
             GT: {
@@ -1014,6 +1029,7 @@ test("parse and write vcf: Samples missing values", () => {
         q: null,
         f: [],
         n: {},
+        g: "GT:GQ:HQ",
         s: [
           {
             GT: {
@@ -1123,5 +1139,5 @@ const vcfSamples = `##fileformat=VCFv4.2
 ##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0\tSAMPLE1\tSAMPLE2
-1\t1\t.\tA\tG\t.\t.\t.\tGT:AD:GQ:HQ\t0|1:1,50:1:2,3\t0/1:20,80:.:4,5\t1/1
+1\t1\t.\tA\tG\t.\t.\t.\tGT:GQ:AD:HQ\t0|1:1:1,50:2,3\t0/1:.:20,80:4,5\t1/1
 `;
