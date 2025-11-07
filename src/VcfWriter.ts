@@ -126,16 +126,21 @@ function writeInfo(infoFields: FieldMetadataContainer, infoValues: InfoContainer
   const vcf = [];
   for (const infoField of Object.values(infoFields)) {
     if (infoField.id in infoValues) {
-      vcf.push(writeInfoField(infoField, infoValues[infoField.id]!));
+      const infoFieldValue = writeInfoField(infoField, infoValues[infoField.id]!);
+      if (infoFieldValue !== null) {
+        vcf.push(infoFieldValue);
+      }
     }
   }
   return vcf.join(";");
 }
 
-function writeInfoField(infoField: FieldMetadata, infoValue: Value | ValueArray): string {
-  let vcf;
+function writeInfoField(infoField: FieldMetadata, infoValue: Value | ValueArray): string | null {
+  let vcf = null;
   if (infoField.number.count === 0) {
-    vcf = infoField.id;
+    if (infoValue === true) {
+      vcf = infoField.id;
+    }
   } else if (infoField.number.count === 1) {
     vcf = infoField.id + "=" + writeFieldValueSingle(infoField, infoValue);
   } else {

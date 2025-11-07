@@ -322,6 +322,92 @@ test("parse and write vcf: Types", () => {
   expect(writeVcf(input)).toBe(vcfInfoType);
 });
 
+test("parse and write vcf: Types", () => {
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=CHAR,Number=.,Type=Character,Description="Character">',
+        '##INFO=<ID=FLAG,Number=0,Type=Flag,Description="Flag">',
+        '##INFO=<ID=FLOAT,Number=.,Type=Float,Description="Float">',
+        '##INFO=<ID=INT,Number=.,Type=Integer,Description="Integer">',
+        '##INFO=<ID=STRING,Number=.,Type=String,Description="String">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
+      ],
+      info: {
+        CHAR: {
+          id: "CHAR",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "CHARACTER",
+          description: "Character",
+        },
+        FLAG: {
+          id: "FLAG",
+          number: {
+            type: "NUMBER",
+            count: 0,
+          },
+          type: "FLAG",
+          description: "Flag",
+        },
+        FLOAT: {
+          id: "FLOAT",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "FLOAT",
+          description: "Float",
+        },
+        INT: {
+          id: "INT",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "INTEGER",
+          description: "Integer",
+        },
+        STRING: {
+          id: "STRING",
+          number: {
+            type: "OTHER",
+            separator: ",",
+          },
+          type: "STRING",
+          description: "String",
+        },
+      },
+      format: {},
+      samples: [],
+    },
+    data: [
+      {
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {
+          CHAR: ["X"],
+          FLAG: false,
+          FLOAT: [1.2],
+          INT: [3],
+          STRING: ["ABC"],
+        },
+        s: [],
+      },
+    ],
+  } as VcfContainer;
+  expect(writeVcf(input)).toBe(vcfInfoTypeFlagFalse);
+});
+
 test("parse and write vcf: Value escaping", () => {
   const input = {
     metadata: {
@@ -995,6 +1081,17 @@ const vcfInfoType = `##fileformat=VCFv4.2
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
 1\t1\t.\tA\tG\t.\t.\tCHAR=X;FLAG;FLOAT=1.2;INT=3;STRING=ABC
+`;
+
+const vcfInfoTypeFlagFalse = `##fileformat=VCFv4.2
+##INFO=<ID=CHAR,Number=.,Type=Character,Description="Character">
+##INFO=<ID=FLAG,Number=0,Type=Flag,Description="Flag">
+##INFO=<ID=FLOAT,Number=.,Type=Float,Description="Float">
+##INFO=<ID=INT,Number=.,Type=Integer,Description="Integer">
+##INFO=<ID=STRING,Number=.,Type=String,Description="String">
+##contig=<ID=1,length=249250621,assembly=b37>
+#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
+1\t1\t.\tA\tG\t.\t.\tCHAR=X;FLOAT=1.2;INT=3;STRING=ABC
 `;
 
 const vcfInfoTypeStringCornerCases = `##fileformat=VCFv4.2
