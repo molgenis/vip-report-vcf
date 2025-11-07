@@ -76,9 +76,13 @@ export interface FieldMetadata {
   parent?: FieldMetadata;
 }
 
+export interface NestedContainer {
+  [index: number]: FieldMetadata;
+}
+
 export interface NestedFieldMetadata {
   separator: string;
-  items: FieldMetadata[];
+  items: NestedContainer;
 }
 
 export interface InfoMetadata extends FieldMetadata {

@@ -184,7 +184,11 @@ function writeFieldValueNested(
   separator?: string,
 ): string {
   const vcf = [];
-  for (const infoField of nestedField.items) {
+  const orderedKeys = Object.keys(nestedField.items)
+    .map(Number)
+    .sort((a, b) => a - b);
+  for (const index of orderedKeys) {
+    const infoField: FieldMetadata = nestedField.items[index]!;
     if (nestedValues !== null) {
       if (infoField.number.count === 1) {
         vcf.push(writeFieldValueSingle(infoField, nestedValues[infoField.id]!, ""));

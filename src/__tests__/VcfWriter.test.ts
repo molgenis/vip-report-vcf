@@ -1,6 +1,6 @@
 import { writeVcf } from "../VcfWriter";
 import { expect, test } from "vitest";
-import { FieldMetadata, VcfContainer } from "../index";
+import { FieldMetadata, NestedContainer, VcfContainer } from "../index";
 
 test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
   const input = {
@@ -508,61 +508,62 @@ test("parse and write vcf: Nested", () => {
     },
   } as FieldMetadata;
 
-  const items = [
-    {
-      id: "Allele",
-      number: {
-        type: "NUMBER",
-        count: 1,
-      },
-      type: "STRING",
-      parent: parent,
+  const items: NestedContainer = {};
+  items[0] = {
+    id: "Allele",
+    number: {
+      type: "NUMBER",
+      count: 1,
     },
-    {
-      id: "Consequence",
-      number: {
-        type: "OTHER",
-      },
-      type: "STRING",
-      parent: parent,
+    type: "STRING",
+    parent: parent,
+  };
+  items[3] = {
+    id: "SYMBOL",
+    number: {
+      type: "NUMBER",
+      count: 1,
     },
-    {
-      id: "IMPACT",
-      number: {
-        type: "NUMBER",
-        count: 1,
-      },
-      type: "STRING",
-      parent: parent,
+    type: "STRING",
+    parent: parent,
+  };
+  items[1] = {
+    id: "Consequence",
+    number: {
+      type: "OTHER",
     },
-    {
-      id: "SYMBOL",
-      number: {
-        type: "NUMBER",
-        count: 1,
-      },
-      type: "STRING",
-      parent: parent,
+    type: "STRING",
+    parent: parent,
+  };
+  items[2] = {
+    id: "IMPACT",
+    number: {
+      type: "NUMBER",
+      count: 1,
     },
-    {
-      id: "Gene",
-      number: {
-        type: "NUMBER",
-        count: 1,
-      },
-      type: "STRING",
-      parent: parent,
+    type: "STRING",
+    parent: parent,
+  };
+
+  items[5] = {
+    id: "Feature_type",
+    number: {
+      type: "NUMBER",
+      count: 1,
     },
-    {
-      id: "Feature_type",
-      number: {
-        type: "NUMBER",
-        count: 1,
-      },
-      type: "STRING",
-      parent: parent,
+    type: "STRING",
+    parent: parent,
+  };
+  items[4] = {
+    id: "Gene",
+    number: {
+      type: "NUMBER",
+      count: 1,
     },
-  ] as FieldMetadata[];
+    type: "STRING",
+    parent: parent,
+  };
+
   const input = {
     metadata: {
       lines: [
