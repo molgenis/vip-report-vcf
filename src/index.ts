@@ -4,8 +4,17 @@ export const writeVcf = writeVcfAlias;
 
 // exported types and interfaces
 export interface VcfContainer {
+  infoOrder?: InfoOrder;
   metadata: VcfMetadata;
-  data: VcfRecord[];
+  data: VariantRecords;
+}
+
+export interface VariantRecords {
+  [variantId: string]: VcfRecord;
+}
+
+export interface InfoOrder {
+  [variantId: string]: Map<string, number>;
 }
 
 export interface VcfMetadata {

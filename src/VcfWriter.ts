@@ -21,8 +21,12 @@ export function writeVcf(container: VcfContainer, filter: Filter = {}): string {
   const vcf = [];
   vcf.push(writeHeader(container.metadata, filter));
 
-  for (const record of container.data) {
-    const line = writeRecord(container.metadata, record, filter);
+  for (const [variantId, record] of Object.entries(container.data)) {
+    const order: Map<string, number> =
+      container.infoOrder !== undefined && container.infoOrder[variantId] !== undefined
+        ? container.infoOrder[variantId]
+        : new Map<string, number>();
+    const line = writeRecord(container.metadata, record, filter, order);
     vcf.push(line);
   }
   return vcf.join("\n") + "\n";
@@ -56,7 +60,7 @@ function writeHeader(metadata: VcfMetadata, filter: Filter): string {
   return vcf.join("\n");
 }
 
-function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): string {
+function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter, infoOrder: Map<string, number>): string {
   const vcf = [];
   vcf.push(writeChr(record.c));
   vcf.push(writePos(record.p));
@@ -65,7 +69,7 @@ function writeRecord(metadata: VcfMetadata, record: VcfRecord, filter: Filter): 
   vcf.push(writeAlts(record.a));
   vcf.push(writeQual(record.q));
   vcf.push(writeFilters(record.f));
-  vcf.push(writeInfo(metadata.info, record.n));
+  vcf.push(writeInfo(metadata.info, record.n, infoOrder));
 
   const samples = filter.samples ? filterSamples(metadata.samples, record.s, filter.samples) : record.s;
   if (Object.keys(samples).length > 0) {
@@ -118,13 +122,26 @@ function writeFilters(filters: string[]): string {
   return filters.length > 0 ? filters.map(writeString).join(";") : MISSING;
 }
 
-function writeInfo(infoFields: FieldMetadataContainer, infoValues: InfoContainer): string {
+function writeInfo(
+  infoFields: FieldMetadataContainer,
+  infoValues: InfoContainer,
+  infoOrder: Map<string, number>,
+): string {
   if (Object.keys(infoFields).length === 0) {
     return MISSING;
   }
 
+  let orderedInfoFields = Object.values(infoFields);
+  if (infoOrder != undefined) {
+    orderedInfoFields = orderedInfoFields.sort((a, b) => {
+      const orderA = infoOrder.get(a.id) ?? Infinity;
+      const orderB = infoOrder.get(b.id) ?? Infinity;
+      return orderA - orderB;
+    });
+  }
+
   const vcf = [];
-  for (const infoField of Object.values(infoFields)) {
+  for (const infoField of orderedInfoFields) {
     if (infoField.id in infoValues) {
       const infoFieldValue = writeInfoField(infoField, infoValues[infoField.id]!);
       if (infoFieldValue !== null) {
