@@ -134,8 +134,8 @@ function writeInfo(
   let orderedInfoFields = Object.values(infoFields);
   if (infoOrder != undefined) {
     orderedInfoFields = orderedInfoFields.sort((a, b) => {
-      const orderA = infoOrder.get(a.id) ?? Infinity;
-      const orderB = infoOrder.get(b.id) ?? Infinity;
+      const orderA = infoOrder.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+      const orderB = infoOrder.get(b.id) ?? Number.MAX_SAFE_INTEGER;
       return orderA - orderB;
     });
   }
