@@ -242,6 +242,99 @@ test("parse and write vcf: Numbers", () => {
   expect(writeVcf(input)).toBe(vcfInfoNumber);
 });
 
+test("parse and write vcf: Invalid", () => {
+  const input = {
+    metadata: {
+      lines: [
+        "##fileformat=VCFv4.2",
+        '##INFO=<ID=STR_A,Number=A,Type=TEST,Description="String:A">',
+        '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+        "##contig=<ID=1,length=249250621,assembly=b37>",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE0",
+      ],
+      info: {
+        STR_A: {
+          id: "STR_A",
+          number: {
+            type: "PER_ALT",
+            separator: ",",
+          },
+          type: "TEST",
+          description: "String:A",
+        },
+      },
+      format: {
+        GT: {
+          id: "GT",
+          number: {
+            type: "NUMBER",
+            count: 1,
+          },
+          type: "STRING",
+          description: "Genotype",
+        },
+      },
+      samples: ["SAMPLE0"],
+    },
+    data: {
+      "1": {
+        c: "1",
+        p: 1,
+        i: [],
+        r: "A",
+        a: [],
+        q: null,
+        f: [],
+        n: {
+          STR_R: ["A"],
+          STR_G: ["H"],
+          STR_X: ["B", "C", "D"],
+          STR_1: "E",
+          STR_2: ["F", "G"],
+        },
+        g: "GT",
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+          },
+        ],
+      },
+      "2": {
+        c: "1",
+        p: 2,
+        i: [],
+        r: "A",
+        a: ["G"],
+        q: null,
+        f: [],
+        n: {
+          STR_A: ["A"],
+          STR_R: ["B", "C"],
+          STR_G: ["J"],
+          STR_X: ["D", "E", "F"],
+          STR_1: "G",
+          STR_2: ["H", "I"],
+        },
+        g: "GT",
+        s: [
+          {
+            GT: {
+              a: [0, 1],
+              t: "het",
+              p: true,
+            },
+          },
+        ],
+      },
+    },
+  } as VcfContainer;
+  expect(() => writeVcf(input)).toThrow("invalid info value type 'TEST'");
+});
+
 test("parse and write vcf: INFO order", () => {
   const input = {
     infoOrder: {
@@ -705,7 +798,7 @@ test("parse and write vcf: Nested", () => {
     },
     type: "STRING",
     description:
-      "Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|PICK|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN",
+      "Consequence annotations from Ensembl VEP. Format: Allele|Consequence|PICK|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN",
     nested: {
       separator: "|",
       items: [],
@@ -740,6 +833,15 @@ test("parse and write vcf: Nested", () => {
     parent: parent,
   };
   items[2] = {
+    id: "PICK",
+    number: {
+      type: "NUMBER",
+      count: 1,
+    },
+    type: "FLAG",
+    parent: parent,
+  };
+  items[3] = {
     id: "IMPACT",
     number: {
       type: "NUMBER",
@@ -749,7 +851,7 @@ test("parse and write vcf: Nested", () => {
     parent: parent,
   };
 
-  items[5] = {
+  items[6] = {
     id: "Feature_type",
     number: {
       type: "NUMBER",
@@ -758,7 +860,7 @@ test("parse and write vcf: Nested", () => {
     type: "STRING",
     parent: parent,
   };
-  items[4] = {
+  items[5] = {
     id: "Gene",
     number: {
       type: "NUMBER",
@@ -807,6 +909,7 @@ test("parse and write vcf: Nested", () => {
         n: {
           CSQ: [
             {
+              PICK: 1,
               Allele: "G",
               Consequence: ["splice_acceptor_variant", "intro_variant"],
               IMPACT: "HIGH",
@@ -815,6 +918,7 @@ test("parse and write vcf: Nested", () => {
               Feature_type: "Transcript",
             },
             {
+              PICK: 0,
               Allele: "G",
               Consequence: ["splice_acceptor_variant"],
               IMPACT: "HIGH",
@@ -1337,7 +1441,7 @@ const vcfInfoNested = `##fileformat=VCFv4.2
 ##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|PICK|SYMBOL_SOURCE|HGNC_ID|REFSEQ_MATCH|REFSEQ_OFFSET|SOURCE|SIFT|PolyPhen|HGVS_OFFSET|CLIN_SIG|SOMATIC|PHENO|PUBMED|CHECK_REF|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|TRANSCRIPTION_FACTORS|SpliceAI_pred_DP_AG|SpliceAI_pred_DP_AL|SpliceAI_pred_DP_DG|SpliceAI_pred_DP_DL|SpliceAI_pred_DS_AG|SpliceAI_pred_DS_AL|SpliceAI_pred_DS_DG|SpliceAI_pred_DS_DL|SpliceAI_pred_SYMBOL|CAPICE_CL|CAPICE_SC|IncompletePenetrance|InheritanceModesGene|VKGL_CL|gnomAD|gnomAD_AF|gnomAD_HN">
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
-1\t1\t.\tA\tG\t.\tPASS\tCSQ=G-splice_acceptor_variant&intro_variant-HIGH-SHOX-6473-Transcript,G-splice_acceptor_variant-HIGH-SHOX-6473-Transcript,G-regulatory_region_variant-MODIFIER---RegulatoryFeature
+1\t1\t.\tA\tG\t.\tPASS\tCSQ=G-splice_acceptor_variant&intro_variant-1-HIGH-6473-Transcript,G-splice_acceptor_variant-1-HIGH-6473-Transcript,G-regulatory_region_variant-1-MODIFIER--RegulatoryFeature
 `;
 
 const vcfSamples = `##fileformat=VCFv4.2
