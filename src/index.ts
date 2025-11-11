@@ -4,8 +4,17 @@ export const writeVcf = writeVcfAlias;
 
 // exported types and interfaces
 export interface VcfContainer {
+  infoOrder?: InfoOrder;
   metadata: VcfMetadata;
-  data: VcfRecord[];
+  data: VariantRecords;
+}
+
+export interface VariantRecords {
+  [variantId: string]: VcfRecord;
+}
+
+export interface InfoOrder {
+  [variantId: string]: Map<string, number>;
 }
 
 export interface VcfMetadata {
@@ -24,6 +33,7 @@ export type VcfRecord = {
   a: (string | null)[];
   q: number | null;
   f: string[];
+  g: string | null; //original format string, letter f is already taken for 'filter'
   n: InfoContainer;
   s: RecordSample[];
 };
@@ -76,9 +86,13 @@ export interface FieldMetadata {
   parent?: FieldMetadata;
 }
 
+export interface NestedContainer {
+  [index: number]: FieldMetadata;
+}
+
 export interface NestedFieldMetadata {
   separator: string;
-  items: FieldMetadata[];
+  items: NestedContainer;
 }
 
 export interface InfoMetadata extends FieldMetadata {
