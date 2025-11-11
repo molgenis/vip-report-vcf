@@ -24,7 +24,6 @@ script:
   - pnpm run coverage
   - pnpm run build
 deploy:
-  dpl_version: 2.0.5.4 #pinned to last working version
   provider: script
   script: bash scripts/deploy_npm_registry.sh
   on:
