@@ -95,7 +95,7 @@ function filterSamples(sampleIds: string[], samples: RecordSample[], filterSampl
 }
 
 function writeChr(chr: string): string {
-  return writeString(chr);
+  return chr;
 }
 
 function writePos(pos: number): string {
@@ -103,15 +103,15 @@ function writePos(pos: number): string {
 }
 
 function writeIds(ids: string[]): string {
-  return ids.length > 0 ? ids.map(writeString).join(";") : MISSING;
+  return ids.length > 0 ? ids.join(";") : MISSING;
 }
 
 function writeRef(ref: string): string {
-  return writeString(ref);
+  return ref;
 }
 
 function writeAlts(alts: (string | null)[]): string {
-  return alts.length > 0 ? alts.map((alt) => (alt !== null ? writeString(alt) : MISSING)).join(",") : MISSING;
+  return alts.length > 0 ? alts.map((alt) => (alt !== null ? alt : MISSING)).join(",") : MISSING;
 }
 
 function writeQual(quality: number | null): string {
@@ -119,7 +119,7 @@ function writeQual(quality: number | null): string {
 }
 
 function writeFilters(filters: string[]): string {
-  return filters.length > 0 ? filters.map(writeString).join(";") : MISSING;
+  return filters.length > 0 ? filters.join(";") : MISSING;
 }
 
 function writeInfo(
