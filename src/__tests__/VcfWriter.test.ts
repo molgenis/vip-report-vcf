@@ -33,9 +33,9 @@ test("write vcf: ID,REF,ALT,QUAL,FILTER", () => {
       "2": {
         c: "1",
         p: 2,
-        i: ["id0"],
+        i: ["id0", "CNV:ID"],
         r: "A",
-        a: ["G", "T"],
+        a: ["G", "T", "CNV:TR"],
         q: 15,
         f: ["q10"],
         n: {},
@@ -1366,7 +1366,7 @@ const vcfIdRefAltQualFilter = `##fileformat=VCFv4.2
 ##contig=<ID=1,length=249250621,assembly=b37>
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO
 1\t1\t.\tA\tG\t25\tPASS\t.
-1\t2\tid0\tA\tG,T\t15\tq10\t.
+1\t2\tid0;CNV:ID\tA\tG,T,CNV:TR\t15\tq10\t.
 1\t3\tid1;id2\tA\t.\t5.5\tq10;q20\t.
 1\t4\t.\tA\tG,.\t.\t.\t.
 `;
