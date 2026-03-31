@@ -42,7 +42,7 @@ function writeHeader(metadata: VcfMetadata, filter: Filter): string {
         vcf.push(
           line
             .split("\t")
-            .filter((token, index) => index <= 7)
+            .filter((_, index) => index <= 7)
             .join("\t"),
         );
       } else {
@@ -279,7 +279,7 @@ function writeSample(formatFields: FormatMetadataContainer, sample: RecordSample
 function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): string {
   let vcf;
   if (formatField.id === "GT") {
-    vcf = writeSampleValueGt(formatField, value as Genotype);
+    vcf = writeSampleValueGt(value as Genotype);
   } else {
     if (formatField.number.count === 0) {
       vcf = formatField.id;
@@ -293,7 +293,7 @@ function writeSampleValue(formatField: FieldMetadata, value: RecordSampleType): 
   return vcf;
 }
 
-function writeSampleValueGt(formatField: FieldMetadata, value: Genotype) {
+function writeSampleValueGt(value: Genotype) {
   const vcfValues = value.a.map((alleleIndex) => (alleleIndex != null ? alleleIndex : MISSING));
   return vcfValues.join(value.p ? "|" : "/");
 }
