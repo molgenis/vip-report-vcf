@@ -114,8 +114,12 @@ function parseFieldMetadata(
     const fieldMetadata: SupplementaryFieldMetadata = meta[parsedIdentifier] as SupplementaryFieldMetadataItem;
     parsedNumber = {
       type: fieldMetadata.numberType,
-      count: fieldMetadata.numberCount,
-      separator: fieldMetadata.separator,
+      ...(fieldMetadata.numberCount !== undefined && {
+        count: fieldMetadata.numberCount,
+      }),
+      ...(fieldMetadata.separator !== undefined && {
+        separator: fieldMetadata.separator,
+      }),
     };
     parsedType = fieldMetadata.type;
     required = fieldMetadata.required !== undefined ? fieldMetadata.required : false;

@@ -68,7 +68,7 @@ test("parse format metadata from json", () => {
     '##FORMAT=<ID=VI,Number=.,Type=String,Description="An enumeration of possible inheritance modes based on the pedigree of the sample. Potential values: AD, AD_IP, AR, AR_C, XLR, XLD, YL, MT">';
   expect(parseFormatMetadata(token, meta.format)).toStrictEqual({
     id: "VI",
-    number: { type: "OTHER", count: undefined, separator: "," },
+    number: { type: "OTHER", separator: "," },
     type: "CATEGORICAL",
     categories: [
       {
@@ -110,7 +110,7 @@ test("parse unnested metadata from json", () => {
   const token = '##INFO=<ID=TEST,Number=.,Type=String,Description="field desc from file">';
   expect(parseInfoMetadata(token, meta.info)).toStrictEqual({
     id: "TEST",
-    number: { type: "NUMBER", count: 1, separator: undefined },
+    number: { type: "NUMBER", count: 1 },
     type: "CATEGORICAL",
     categories: [
       {
