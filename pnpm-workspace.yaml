@@ -2,5 +2,4 @@ blockExoticSubdeps: true
 minimumReleaseAge: 720
 trustPolicy: no-downgrade
 overrides:
-  vite: 8.3.5
   eslint: 10.13.0
